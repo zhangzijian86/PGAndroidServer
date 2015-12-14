@@ -1,0 +1,6 @@
+dynamic web project
+选择tomcat6.0  
+WebRoot
+添加lib 包PGAndroidServer/WebRoot/WEB-INF/lib/
+编译文件变换路径PGAndroidServer/WebRoot/WEB-INF/classes
+
