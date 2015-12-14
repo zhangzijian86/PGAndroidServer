@@ -4,3 +4,19 @@ WebRoot
 添加lib 包PGAndroidServer/WebRoot/WEB-INF/lib/
 编译文件变换路径PGAndroidServer/WebRoot/WEB-INF/classes
 
+
+CREATE TABLE USERMSG(   'USERNAME' Varchar(20)  NOT NULL,   'PASSWORD' Varchar(20)  NOT NULL,   'SEX' Varchar(20)  NOT NULL,   'AGE' Varchar(20)  NOT NULL,   'PHOTO' Varchar(20)  NOT NULL );
+
+insert into USERMSG (USERNAME,PASSWORD,SEX,AGE,PHOTO)values('111','aaa','1a','1a','');
+
+CREATE TABLE 'PGDR_USER'
+(
+'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+'section' Varchar(150) ,
+'groupID' Varchar(150) ,
+'key' Varchar(150) , 
+'value' BLOB,
+'valueType' Varchar(50) , 
+'min' float,'max' float, 
+'uid' Varchar(50),'defaultValue' text
+);
