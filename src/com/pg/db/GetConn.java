@@ -10,7 +10,7 @@ public class GetConn {
 		Connection connection = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			connection=DriverManager.getConnection("jdbc:sqlite:/home/zzj/web/zzj.db");
+			connection=DriverManager.getConnection("jdbc:sqlite:/home/zzj/web/webWorks/PGAndroidServer/PGAndroidServer.db");
 		} catch (ClassNotFoundException e) {			
 			e.printStackTrace();
 		} catch (SQLException e) {	

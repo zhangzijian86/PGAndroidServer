@@ -6,15 +6,15 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.pg.bean.User;
+import com.pg.bean.Pgdr_user;
 
 
 public class JsonUtil {
-	public List<User> StringFromJson (String jsondata)
+	public List<Pgdr_user> StringFromJson (String jsondata)
 	{     
-		Type listType = new TypeToken<List<User>>(){}.getType();
+		Type listType = new TypeToken<List<Pgdr_user>>(){}.getType();
 		Gson gson=new Gson();
-		ArrayList<User> list=gson.fromJson(jsondata, listType);
+		ArrayList<Pgdr_user> list=gson.fromJson(jsondata, listType);
 		return list;
 
 	}
