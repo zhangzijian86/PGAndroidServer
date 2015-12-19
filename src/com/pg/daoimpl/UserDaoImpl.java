@@ -14,15 +14,15 @@ import com.pg.db.GetConn;
 
 public class UserDaoImpl 
 {
-	public boolean login(String username,String password) 
+	public boolean login(String usermobile,String password) 
 	{
 		boolean b = false;
 		GetConn getConn=new GetConn();
 		ResultSet rs = null;
 		Connection conn=getConn.getConnection();
 		try {
-			PreparedStatement ps=conn.prepareStatement("select * from PGDR_USER where USER_NAME=? and USER_PASSWORD=?");
-			ps.setString(1,username);
+			PreparedStatement ps=conn.prepareStatement("select * from PGDR_USER where USER_MOBILE=? and USER_PASSWORD=?");
+			ps.setString(1,usermobile);
 			ps.setString(2,password);
 			rs=ps.executeQuery();
 			if (rs.next())

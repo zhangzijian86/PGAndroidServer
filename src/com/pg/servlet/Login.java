@@ -29,12 +29,12 @@ public class Login extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setCharacterEncoding("utf-8");
 	    PrintWriter out=response.getWriter();
-		String username=request.getParameter("username");
+		String usermobile=request.getParameter("usermobile");
 		String password=request.getParameter("password");
-		out.write("登录成功==0="+username); 
+		out.write("登录成功==0="+usermobile); 
 		out.write("登录成功==1="+password); 
 		UserDaoImpl userDaoImpl=new UserDaoImpl();
-		boolean b=userDaoImpl.login(username,password);
+		boolean b=userDaoImpl.login(usermobile,password);
 		if (b) 
 		{
 			out.write("登录成功");
