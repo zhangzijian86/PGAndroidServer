@@ -31,17 +31,21 @@ public class Login extends HttpServlet {
 	    PrintWriter out=response.getWriter();
 		String usermobile=request.getParameter("usermobile");
 		String password=request.getParameter("password");
-		out.write("登录成功==0="+usermobile); 
-		out.write("登录成功==1="+password); 
+//		out.write("登录成功==0="+usermobile); 
+		System.out.println("====doPost=============usermobile======"+usermobile);
+//		out.write("登录成功==1="+password); 
+		System.out.println("====doPost=============password======"+password);
 		UserDaoImpl userDaoImpl=new UserDaoImpl();
 		boolean b=userDaoImpl.login(usermobile,password);
 		if (b) 
 		{
-			out.write("登录成功");
+			System.out.println("====doPost=============success======");
+			out.write("success");
 		}
 		else 
 		{
-			out.write("登录失败");
+			System.out.println("====doPost=============false======");
+			out.write("false");
 		}
 		out.flush();
 		out.close();
