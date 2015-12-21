@@ -28,17 +28,17 @@ public class Check extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		request.setCharacterEncoding("utf-8");
 		PrintWriter out=response.getWriter();
-		String user_mobile=request.getParameter("user_mobile");
+		String user_mobile=request.getParameter("phoneNumber");
 		UserDaoImpl userDaoImpl=new UserDaoImpl();
 		boolean b=userDaoImpl.check(user_mobile);
 		if (b)  //手机号存在
 		{
-			String a="yes";
+			String a="yesphoneNumber";
 			out.write(a);
 		}
 		else  //手机号不存在
 		{
-			 String c="no";
+			 String c="no"+"yanzhengma";
 			 out.write(c);
 		}
 		out.flush();
