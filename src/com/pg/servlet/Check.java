@@ -2,6 +2,7 @@ package com.pg.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Random;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -38,7 +39,9 @@ public class Check extends HttpServlet {
 		}
 		else  //手机号不存在
 		{
-			 String c="no"+"yanzhengma";
+			 Random rd = new Random();
+			 int result =rd.nextInt(900000)+100000;
+			 String c="no"+result;
 			 out.write(c);
 		}
 		out.flush();
