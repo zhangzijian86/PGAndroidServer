@@ -45,8 +45,9 @@ public class UserDaoImpl
 		int i = 0;
 		Connection conn=getConn.getConnection();
 		try {
-			PreparedStatement ps=conn.prepareStatement("insert into PGDR_USER (USER_MOBILE) values (?)");
+			PreparedStatement ps=conn.prepareStatement("insert into PGDR_USER (USER_MOBILE,USER_PASSWORD) values (?,?)");
 			ps.setString(1,pgdr_user.getUser_mobile());
+			ps.setString(2,pgdr_user.getUser_password());
 			i=ps.executeUpdate();
 			if (i>0)
 			{

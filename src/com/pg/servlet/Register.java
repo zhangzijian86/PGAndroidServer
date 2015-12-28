@@ -48,7 +48,7 @@ public class Register extends HttpServlet {
 			out.write("yes");
 		}
 		else {
-			out.write("no");
+			out.write("");
 		}
 		out.flush();
 		out.close();
