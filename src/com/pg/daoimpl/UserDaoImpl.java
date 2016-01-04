@@ -60,8 +60,8 @@ public class UserDaoImpl
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return b;
-		
+		getConn.closeconn(conn);
+		return b;		
 	}
 	public List<Pgdr_user> selectAlluser ()
 	{
@@ -81,6 +81,7 @@ public class UserDaoImpl
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		getConn.closeconn(conn);
 		return list;
 	}
 	public List<Ppdr_dailyrecycle> selectAllcontact (String username)
@@ -121,6 +122,7 @@ public class UserDaoImpl
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		getConn.closeconn(conn);
 		return list;
 	}
 	public boolean check(String user_mobile) 
@@ -154,6 +156,7 @@ public class UserDaoImpl
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		getConn.closeconn(conn);
 		return b;
 	}
 	
