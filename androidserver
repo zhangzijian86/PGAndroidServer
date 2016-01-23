@@ -37,3 +37,59 @@ CREATE TABLE 'PGDR_DAILYRECYCLE'(
 'DAILYRECYCLE_RECYCLINGMANPHONE' Varchar(50),--回收人手机
 'DAILYRECYCLE_FINISHTIME' Varchar(50)--回收时间
 )
+============================================================
+mysql
+
+SHOW COLUMNS FROM  PGDR_DAILYRECYCLE; -- 显示列名
+
+show variables like 'character_set%'; -- 查看字符类型
+
+http://www.2cto.com/database/201403/285169.html -- 中文乱码
+
+sudo service mysqld stop 关闭服务
+
+service mysqld start 启动服务
+
+create database PGAndroidServer;
+
+drop database PGAndroidServer; -- 删除数据库
+
+ALTER DATABASE  PGAndroidServer DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; -- 设置数据库编码格式
+
+ALTER TABLE  PGDR_USER DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; -- 设置表编码格式
+
+CREATE TABLE PGDR_USER(
+USER_ID int(50) NOT NULL auto_increment,
+USER_MOBILE Varchar(20) ,
+USER_NAME Varchar(50) ,
+USER_PASSWORD Varchar(50) ,
+USER_ADDRESS  Varchar(150) ,
+USER_EMAIL Varchar(50) ,
+USER_STATUS int(50), -- 用户状态 -1 删除 0 禁用  1 正常   
+USER_TYPE int(50) , -- 用户类型 0 普通用户 1小贩
+USER_PHOTO MEDIUMBLOB,
+PRIMARY KEY (USER_ID)
+);
+
+insert into PGDR_USER (USER_MOBILE,USER_NAME,USER_PASSWORD,USER_ADDRESS,USER_EMAIL,USER_STATUS,USER_TYPE,USER_PHOTO) values ('13581905786','zzj','123456','北京市','zzj@163.com','1','0','');
+insert into PGDR_USER (USER_MOBILE,USER_NAME,USER_PASSWORD,USER_ADDRESS,USER_EMAIL,USER_STATUS,USER_TYPE,USER_PHOTO) values ('112522','zzj','123456','北京市','zzj@163.com','1','0','');
+
+CREATE TABLE PGDR_DAILYRECYCLE(
+DAILYRECYCLE_ID int(50) NOT NULL auto_increment,
+DAILYRECYCLE_USER_MOBILE Varchar(20) ,
+DAILYRECYCLE_DATE Varchar(50) ,
+DAILYRECYCLE_WEEK Varchar(50) ,
+DAILYRECYCLE_ISCYCLE int(50),-- 是否是周期
+DAILYRECYCLE_CYCLETYPE Varchar(50),-- 周期类型 每周，每月
+DAILYRECYCLE_ISVALID int(50),-- 是否是有效
+DAILYRECYCLE_STATUS Varchar(50),-- 状态  1 完成 0未完成
+DAILYRECYCLE_RECYCLINGMANPHONE Varchar(50),-- 回收人手机
+DAILYRECYCLE_FINISHTIME Varchar(50), -- 回收时间
+PRIMARY KEY (DAILYRECYCLE_ID)
+)
+
+
+
+
+
+

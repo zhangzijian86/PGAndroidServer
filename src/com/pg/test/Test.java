@@ -7,7 +7,7 @@ public class Test {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		UserDaoImpl userDaoImpl=new UserDaoImpl();
-		userDaoImpl.check("1121");
+		userDaoImpl.check("13581905786");
 	}
 
 }
