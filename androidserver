@@ -40,6 +40,8 @@ CREATE TABLE 'PGDR_DAILYRECYCLE'(
 ============================================================
 mysql
 
+sudo mysql -uroot -p123456 登陆
+
 SHOW COLUMNS FROM  PGDR_DAILYRECYCLE; -- 显示列名
 
 show variables like 'character_set%'; -- 查看字符类型
