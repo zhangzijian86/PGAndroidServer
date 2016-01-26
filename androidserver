@@ -38,6 +38,13 @@ CREATE TABLE 'PGDR_DAILYRECYCLE'(
 'DAILYRECYCLE_FINISHTIME' Varchar(50)--回收时间
 )
 ============================================================
+http://dev.mysql.com/downloads/mysql/
+http://blog.163.com/ji_1006/blog/static/106123412015104103948782/
+http://blog.itpub.net/29733787/viewspace-1590891/
+http://jingyan.baidu.com/article/a378c9609eb652b3282830fd.html
+./bin/mysql -uroot -p123456
+install libaio*
+
 mysql
 
 sudo mysql -uroot -p123456 登陆
@@ -59,6 +66,7 @@ drop database PGAndroidServer; -- 删除数据库
 ALTER DATABASE  PGAndroidServer DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; -- 设置数据库编码格式
 
 ALTER TABLE  PGDR_USER DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; -- 设置表编码格式
+ALTER TABLE  PGDR_DAILYRECYCLE CHARACTER SET utf8 COLLATE utf8_general_ci; -- 设置表编码格式
 
 CREATE TABLE PGDR_USER(
 USER_ID int(50) NOT NULL auto_increment,
