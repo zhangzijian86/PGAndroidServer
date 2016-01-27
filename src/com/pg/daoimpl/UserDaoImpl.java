@@ -14,29 +14,43 @@ import com.pg.db.GetConn;
 
 public class UserDaoImpl 
 {
-	public boolean login(String usermobile,String password) 
+	public Pgdr_user login(String usermobile,String password) 
 	{
 		boolean b = false;
 		GetConn getConn=new GetConn();
 		ResultSet rs = null;
 		Connection conn=getConn.getConnection();
+		Pgdr_user puser = new Pgdr_user();
 		try {
-			PreparedStatement ps=conn.prepareStatement("select * from PGDR_USER where USER_MOBILE=? and USER_PASSWORD=?");
+			PreparedStatement ps=conn.prepareStatement("select USER_ID,USER_MOBILE,USER_NAME,USER_PASSWORD"
+					+ ",USER_ADDRESS,USER_EMAIL,USER_STATUS,USER_TYPE,USER_PHOTO"
+					+ " from PGDR_USER where USER_MOBILE=? and USER_PASSWORD=?");
 			ps.setString(1,usermobile);
 			ps.setString(2,password);
 			rs=ps.executeQuery();
 			if (rs.next())
 			{
 				b=true;
+				puser.setUser_id(rs.getString("USER_ID"));
+				puser.setUser_name(rs.getString("USER_NAME"));
+				puser.setUser_password(rs.getString("USER_PASSWORD"));
+				puser.setUser_mobile(rs.getString("USER_MOBILE"));
+				puser.setUser_address(rs.getString("USER_ADDRESS"));
+				puser.setUser_email(rs.getString("USER_EMAIL"));
+				puser.setUser_status(rs.getString("USER_STATUS"));
+				puser.setUser_type(rs.getString("USER_TYPE"));
+				puser.setUser_photo(rs.getString("USER_PHOTO"));
+				puser.setUser_return(true);
 			}
 			else
 			{
+				puser.setUser_return(false);
 				b=false;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return b;
+		return puser;
 	}
 	public boolean register(Pgdr_user pgdr_user)
 	{

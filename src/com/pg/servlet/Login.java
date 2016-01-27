@@ -2,12 +2,16 @@ package com.pg.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.pg.bean.Pgdr_user;
 import com.pg.daoimpl.UserDaoImpl;
 
 
@@ -36,17 +40,23 @@ public class Login extends HttpServlet {
 //		out.write("登录成功==1="+password); 
 		System.out.println("====doPost=============password======"+password);
 		UserDaoImpl userDaoImpl=new UserDaoImpl();
-		boolean b=userDaoImpl.login(usermobile,password);
-		if (b) 
-		{
-			System.out.println("====doPost=============success======");
-			out.write("success");
-		}
-		else 
-		{
-			System.out.println("====doPost=============false======");
-			out.write("false");
-		}
+		Pgdr_user puser=userDaoImpl.login(usermobile,password);
+		List<Pgdr_user> list1=new ArrayList<Pgdr_user>();
+		Gson gson=new Gson();//利用google提供的gson将一个list集合写成json形式的字符串		
+		list1.add(puser);
+		String jsonstring=gson.toJson(list1);
+		System.out.println("======jsonstring========="+jsonstring);
+		out.write(jsonstring);
+//		if (b) 
+//		{
+//			System.out.println("====doPost=============success======");
+//			out.write("success");
+//		}
+//		else 
+//		{
+//			System.out.println("====doPost=============false======");
+//			out.write("false");
+//		}
 		out.flush();
 		out.close();
 	}
