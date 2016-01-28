@@ -1,5 +1,6 @@
 package com.pg.daoimpl;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -77,6 +78,60 @@ public class UserDaoImpl
 		getConn.closeconn(conn);
 		return b;		
 	}
+	
+	public boolean updateUser(Pgdr_user pgdr_user)
+	{
+		System.out.println("====UpdateUser=============33======");
+		boolean b=false;
+		GetConn getConn=new GetConn();
+		int i = 0;
+		Connection conn=getConn.getConnection();
+		try {
+			PreparedStatement ps=conn.prepareStatement("update PGDR_USER "
+													+ "set USER_NAME = ? , "
+													+ "USER_PASSWORD = ? , "
+													+ "USER_ADDRESS = ? , "
+													+ "USER_EMAIL = ? , "
+													+ "USER_STATUS = ? , "
+													+ "USER_TYPE = ? , "
+													+ "USER_PHOTO = ?  "
+													+ "where USER_MOBILE = ? "
+													);
+			System.out.println("====UpdateUser=============44======");
+			ps.setString(1,pgdr_user.getUser_name());
+			ps.setString(2,pgdr_user.getUser_password());	
+			String address = pgdr_user.getUser_address();
+			System.out.println("====UpdateUser=============55======");
+			try {
+				String addressstr = new String(address.getBytes("UTF-8"));
+				ps.setString(3,addressstr);
+				System.out.println("====UpdateUser=============66======"+addressstr);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}			
+			//ps.setString(3,pgdr_user.getUser_address());
+			ps.setString(4,pgdr_user.getUser_email());
+			ps.setString(5,pgdr_user.getUser_status());
+			ps.setString(6,pgdr_user.getUser_type());
+			ps.setString(7,pgdr_user.getUser_photo());
+			ps.setString(8,pgdr_user.getUser_mobile());
+			System.out.println("====UpdateUser=============77====sql=="+ps.toString());
+			i=ps.executeUpdate();
+			if (i>0)
+			{
+				b=true;
+			}
+			else
+			{
+				b=false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		getConn.closeconn(conn);
+		return b;		
+	}
+	
 	public List<Pgdr_user> selectAlluser ()
 	{
 		List<Pgdr_user> list=new ArrayList<Pgdr_user>();

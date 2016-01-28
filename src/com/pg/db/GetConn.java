@@ -12,7 +12,7 @@ public class GetConn {
 			//Class.forName("org.sqlite.JDBC");
 			Class.forName("org.gjt.mm.mysql.Driver");
 			//connection=DriverManager.getConnection("jdbc:sqlite:/home/zzj/web/webWorks/PGAndroidServer/PGAndroidServer.db");
-			connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/PGAndroidServer", "root", "123456");
+			connection=DriverManager.getConnection("jdbc:mysql://localhost:3306/PGAndroidServer?characterEncoding=utf-8", "root", "123456");
 		} catch (ClassNotFoundException e) {			
 			e.printStackTrace();
 		} catch (SQLException e) {	
