@@ -132,6 +132,63 @@ public class UserDaoImpl
 		return b;		
 	}
 	
+	public boolean addRecycle(Ppdr_dailyrecycle pgdr_recycle)
+	{
+		System.out.println("====addRecycle=============33======");
+		boolean b=false;
+		GetConn getConn=new GetConn();
+		int i = 0;
+		Connection conn=getConn.getConnection();
+		try {
+			PreparedStatement ps=conn.prepareStatement("insert into PGDR_DAILYRECYCLE("
+			+ "DAILYRECYCLE_USER_MOBILE,DAILYRECYCLE_DATE,DAILYRECYCLE_WEEK,"
+			+ "DAILYRECYCLE_ISCYCLE,DAILYRECYCLE_CYCLETYPE,DAILYRECYCLE_ISVALID,"
+			+ "DAILYRECYCLE_STATUS,DAILYRECYCLE_RECYCLINGMANPHONE,DAILYRECYCLE_FINISHTIME,"
+			+ "DAILYRECYCLE_TYPE,DAILYRECYCLE_EXPLAIN,DAILYRECYCLE_ADDRESS"
+			+ ")values("
+			+ "?,?,?,"
+			+ "?,?,?,"
+			+ "?,?,?,"
+			+ "?,?,?)"
+			);
+			System.out.println("====addRecycle=============44======");
+			ps.setString(1,pgdr_recycle.getDailyrecycle_user_mobile());
+			ps.setString(2,pgdr_recycle.getDailyrecycle_date());		
+			ps.setString(3,pgdr_recycle.getDailyrecycle_week());
+			ps.setString(4,pgdr_recycle.getDailyrecycle_iscycle());
+			ps.setString(5,pgdr_recycle.getDailyrecycle_cycletype());
+			ps.setString(6,pgdr_recycle.getDailyrecycle_isvalid());
+			ps.setString(7,pgdr_recycle.getDailyrecycle_status());
+			ps.setString(8,pgdr_recycle.getDailyrecycle_recyclingmanphone());
+			ps.setString(9,pgdr_recycle.getDailyrecycle_finishtime());
+			ps.setString(10,pgdr_recycle.getDailyrecycle_type());
+			ps.setString(11,pgdr_recycle.getDailyrecycle_explain());
+			String address = pgdr_recycle.getDailyrecycle_address();
+			System.out.println("====addRecycle=============55======");
+			try {
+				String addressstr = new String(address.getBytes("UTF-8"));
+				ps.setString(12,addressstr);
+				System.out.println("====UpdateUser=============66======"+addressstr);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}			
+			System.out.println("====addRecycle=============77====sql=="+ps.toString());
+			i=ps.executeUpdate();
+			if (i>0)
+			{
+				b=true;
+			}
+			else
+			{
+				b=false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		getConn.closeconn(conn);
+		return b;		
+	}
+	
 	public List<Pgdr_user> selectAlluser ()
 	{
 		List<Pgdr_user> list=new ArrayList<Pgdr_user>();
