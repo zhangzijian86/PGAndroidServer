@@ -53,6 +53,64 @@ public class UserDaoImpl
 		}
 		return puser;
 	}
+	
+	public List<Ppdr_dailyrecycle> getRecycle(String phoneNumber) 
+	{
+		GetConn getConn=new GetConn();
+		ResultSet rs = null;
+		Connection conn=getConn.getConnection();
+		List<Ppdr_dailyrecycle> pdrlist = new ArrayList<Ppdr_dailyrecycle>();
+		try {
+			PreparedStatement ps=conn.prepareStatement(
+					  "select * from (select "
+					+ "DAILYRECYCLE_ID,DAILYRECYCLE_USER_MOBILE,DAILYRECYCLE_DATE,"
+					+ "DAILYRECYCLE_WEEK,DAILYRECYCLE_ISCYCLE,DAILYRECYCLE_CYCLETYPE,"
+					+ "DAILYRECYCLE_ISVALID,DAILYRECYCLE_STATUS,DAILYRECYCLE_RECYCLINGMANPHONE,"
+					+ "DAILYRECYCLE_FINISHTIME,DAILYRECYCLE_TYPE,DAILYRECYCLE_EXPLAIN,"
+					+ "DAILYRECYCLE_ADDRESS,DAILYRECYCLE_NAME "
+					+ "from PGDR_DAILYRECYCLE where DAILYRECYCLE_USER_MOBILE=? "
+					+ "and DAILYRECYCLE_ISVALID = 1 "
+					+ "order by DAILYRECYCLE_STATUS) t1 "
+					+ "UNION "
+					+ "select * from (select "
+					+ "DAILYRECYCLE_ID,DAILYRECYCLE_USER_MOBILE,DAILYRECYCLE_DATE,"
+					+ "DAILYRECYCLE_WEEK,DAILYRECYCLE_ISCYCLE,DAILYRECYCLE_CYCLETYPE,"
+					+ "DAILYRECYCLE_ISVALID,DAILYRECYCLE_STATUS,DAILYRECYCLE_RECYCLINGMANPHONE,"
+					+ "DAILYRECYCLE_FINISHTIME,DAILYRECYCLE_TYPE,DAILYRECYCLE_EXPLAIN,"
+					+ "DAILYRECYCLE_ADDRESS,DAILYRECYCLE_NAME "
+					+ "from PGDR_DAILYRECYCLE where DAILYRECYCLE_RECYCLINGMANPHONE=? "
+					+ "and DAILYRECYCLE_ISVALID = 1 "
+					+ "order by DAILYRECYCLE_STATUS) t2 "
+					);
+			ps.setString(1,phoneNumber);
+			ps.setString(2,phoneNumber);
+			System.out.println("=getRecycle=sql="+ps.toString());
+			rs=ps.executeQuery();
+			while (rs.next())
+			{
+				Ppdr_dailyrecycle pdr = new Ppdr_dailyrecycle();
+				pdr.setDailyrecycle_id(rs.getString("DAILYRECYCLE_ID"));
+				pdr.setDailyrecycle_user_mobile(rs.getString("DAILYRECYCLE_USER_MOBILE"));				
+				pdr.setDailyrecycle_date(rs.getString("DAILYRECYCLE_DATE"));				
+				pdr.setDailyrecycle_week(rs.getString("DAILYRECYCLE_WEEK"));
+				pdr.setDailyrecycle_iscycle(rs.getString("DAILYRECYCLE_ISCYCLE"));
+				pdr.setDailyrecycle_cycletype(rs.getString("DAILYRECYCLE_CYCLETYPE"));				
+				pdr.setDailyrecycle_isvalid(rs.getString("DAILYRECYCLE_ISVALID"));
+				pdr.setDailyrecycle_status(rs.getString("DAILYRECYCLE_STATUS"));
+				pdr.setDailyrecycle_recyclingmanphone(rs.getString("DAILYRECYCLE_RECYCLINGMANPHONE"));				
+				pdr.setDailyrecycle_finishtime(rs.getString("DAILYRECYCLE_FINISHTIME"));
+				pdr.setDailyrecycle_type(rs.getString("DAILYRECYCLE_TYPE"));
+				pdr.setDailyrecycle_explain(rs.getString("DAILYRECYCLE_EXPLAIN"));				
+				pdr.setDailyrecycle_address(rs.getString("DAILYRECYCLE_ADDRESS"));
+				pdrlist.add(pdr);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("=getRecycle==pdrlist==="+pdrlist.size());
+		return pdrlist;
+	}
+	
 	public boolean register(Pgdr_user pgdr_user)
 	{
 		boolean b=false;
@@ -144,14 +202,15 @@ public class UserDaoImpl
 			+ "DAILYRECYCLE_USER_MOBILE,DAILYRECYCLE_DATE,DAILYRECYCLE_WEEK,"
 			+ "DAILYRECYCLE_ISCYCLE,DAILYRECYCLE_CYCLETYPE,DAILYRECYCLE_ISVALID,"
 			+ "DAILYRECYCLE_STATUS,DAILYRECYCLE_RECYCLINGMANPHONE,DAILYRECYCLE_FINISHTIME,"
-			+ "DAILYRECYCLE_TYPE,DAILYRECYCLE_EXPLAIN,DAILYRECYCLE_ADDRESS"
+			+ "DAILYRECYCLE_TYPE,DAILYRECYCLE_EXPLAIN,DAILYRECYCLE_ADDRESS,DAILYRECYCLE_NAME"
 			+ ")values("
 			+ "?,?,?,"
 			+ "?,?,?,"
 			+ "?,?,?,"
-			+ "?,?,?)"
+			+ "?,?,?,"
+			+ "?)"
 			);
-			System.out.println("====addRecycle=============44======");
+			System.out.println("====addRecycle=============44=====sql="+ps.toString());
 			ps.setString(1,pgdr_recycle.getDailyrecycle_user_mobile());
 			ps.setString(2,pgdr_recycle.getDailyrecycle_date());		
 			ps.setString(3,pgdr_recycle.getDailyrecycle_week());
@@ -172,6 +231,7 @@ public class UserDaoImpl
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();
 			}			
+			ps.setString(13,pgdr_recycle.getDailyrecycle_name());
 			System.out.println("====addRecycle=============77====sql=="+ps.toString());
 			i=ps.executeUpdate();
 			if (i>0)
