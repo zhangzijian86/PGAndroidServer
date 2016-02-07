@@ -104,7 +104,13 @@ DAILYRECYCLE_EXPLAIN Varchar(50) , -- 说明 几斤 几个 型号
 DAILYRECYCLE_ADDRESS Varchar(500) ,
 PRIMARY KEY (DAILYRECYCLE_ID)
 )
-
-
+=====================阿里云==============================
+ssh root@123.56.68.127
+sudo apt-get update
+sudo apt-get install mysql-server mysql-client
+dpkg -s mysql-client
+dpkg -s mysql-server
+mysql -uroot -p123456
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456');
 
 
