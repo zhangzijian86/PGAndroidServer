@@ -102,6 +102,7 @@ public class UserDaoImpl
 				pdr.setDailyrecycle_type(rs.getString("DAILYRECYCLE_TYPE"));
 				pdr.setDailyrecycle_explain(rs.getString("DAILYRECYCLE_EXPLAIN"));				
 				pdr.setDailyrecycle_address(rs.getString("DAILYRECYCLE_ADDRESS"));
+				pdr.setDailyrecycle_name(rs.getString("DAILYRECYCLE_NAME"));
 				pdrlist.add(pdr);
 			}
 		} catch (SQLException e) {
