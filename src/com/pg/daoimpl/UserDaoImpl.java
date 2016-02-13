@@ -325,7 +325,7 @@ public class UserDaoImpl
 		System.out.println("====check=============44======");
 		try {
 			System.out.println("====check=========55==========");
-			PreparedStatement ps=conn.prepareStatement("select * from PGDR_USER where USER_MOBILE=?");
+			PreparedStatement ps=conn.prepareStatement("select * from PGDR_USER where USER_MOBILE=? and USER_STATUS = '1' ");
 			System.out.println("====check=========66==========");
 			ps.setString(1,user_mobile);
 			System.out.println("====check=========77==========");
@@ -333,12 +333,23 @@ public class UserDaoImpl
 			if (rs.next())
 			{
 				System.out.println("====check=========88==========");
-				b=true;
+				b=false;
 			}
 			else
 			{
 				System.out.println("====check=========99==========");
-				b=false;
+				int i = 0;
+				PreparedStatement psin=conn.prepareStatement("insert into PGDR_USER (USER_MOBILE,USER_STATUS) values (?,1)");
+				psin.setString(1,user_mobile);
+				i=psin.executeUpdate();
+				if (i>0)
+				{
+					b=false;
+				}
+				else
+				{
+					b=true;
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
