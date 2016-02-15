@@ -59,7 +59,7 @@ http://www.2cto.com/database/201403/285169.html -- 中文乱码
 
 sudo service mysqld stop 关闭服务
 
-service mysqld start 启动服务
+sudo service mysqld start 启动服务
 
 create database PGAndroidServer;
 
@@ -112,5 +112,9 @@ dpkg -s mysql-client
 dpkg -s mysql-server
 mysql -uroot -p123456
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123456');
+
+=====================短信=========================
+http://sms.jiangukj.com/user/home.aspx
+zwzfj2
 
 
