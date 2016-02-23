@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import cn.jpush.api.JPushClient;
+import cn.jpush.api.common.resp.APIConnectionException;
+import cn.jpush.api.common.resp.APIRequestException;
+import cn.jpush.api.push.PushResult;
 import cn.jpush.api.push.model.Platform;
 import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
@@ -24,6 +27,7 @@ public class OrderManager {
 	
 	public int updateUser(String id,String photonumber)
 	{
+		PushPayload payload  = null;
 		GetConn getConn=new GetConn();
 		int i = 0;
 		Connection conn=getConn.getConnection();
@@ -34,17 +38,29 @@ public class OrderManager {
 													);
 			ps.setString(1,photonumber);
 			ps.setString(2,id);		
-			System.out.println("=updateUser="+ps.toString());
+			System.out.println("=updateUser=sql="+ps.toString());
 			i=ps.executeUpdate();
 			if(i>0){
-				PushPayload.newBuilder()
+				payload = PushPayload.newBuilder()
                 .setPlatform(Platform.all())
-                .setAudience(Audience.alias(photonumber))
+                //.setAudience(Audience.alias(photonumber))
                 .setNotification(Notification.alert("您有一个订单需要提取！"))
-                .build();
+                .build();//				      
+		        PushResult result = jpushClient.sendPush(payload);
+		        System.out.println("=updateUser=result="+result);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (APIConnectionException ex) {
+			// Connection error, should retry later
+			System.out.println("Connection error, should retry later"+ ex.toString());
+		} catch (APIRequestException ex) {
+			// Should review the error, and fix the request
+	    	 System.out.println("Should review the error, and fix the request"+ ex);
+	    	 System.out.println("Should review the error, and fix the request"+ ex);
+	    	 System.out.println("HTTP Status: " + ex.getStatus());
+	    	 System.out.println("Error Code: " + ex.getErrorCode());
+	    	 System.out.println("Error Message: " + ex.getErrorMessage());
 		}
 		getConn.closeconn(conn);
 		return i;		
