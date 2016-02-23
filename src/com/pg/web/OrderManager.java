@@ -43,7 +43,7 @@ public class OrderManager {
 			if(i>0){
 				payload = PushPayload.newBuilder()
                 .setPlatform(Platform.all())
-                //.setAudience(Audience.alias(photonumber))
+                .setAudience(Audience.alias(photonumber))
                 .setNotification(Notification.alert("您有一个订单需要提取！"))
                 .build();//				      
 		        PushResult result = jpushClient.sendPush(payload);

@@ -115,8 +115,9 @@ pu = om.getUsers();
 		        		alert("分配提货人员失败");
 		        	}
 		        },
-		        error: function( msg ) { 
-		        	alert("==error=="+msg);
+		       error: function( msg ) { 
+		    	   window.opener.location.href = window.opener.location.href;
+	        		window.close();  
 		        }
 			});
 		}
