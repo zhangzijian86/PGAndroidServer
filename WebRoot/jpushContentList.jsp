@@ -11,9 +11,8 @@ pdr = udi.getRecycle();
 %>
 <html>
 <head>
-		<meta charset="utf-8">
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    	<title>推送数据列表</title>
+    	<title>订单数据列表</title>
     	<!-- Bootstrap -->
     	<link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/bootstrap-responsive.css" rel="stylesheet">
@@ -28,33 +27,36 @@ pdr = udi.getRecycle();
         	<table class="table table-hover table-bordered">
             	<thead>
                 	<tr>
-                        <th><h3>推送数据列表</h3></th>
-                        <th colspan="4"></th>
+                        <th colspan="2"><h3>订单数据列表</h3></th>
+                        <th colspan="5"></th>
                         <th><h3><a href="jpushContentNewPush.jsp">新数据推送</a></h3></th>                        
                     </tr>
                 </thead>
                 <tbody>
 				 <tr class="warning">
-                    	<td width="15%">
-                        	标题
+                    	<td width="8%">
+                        	姓名
                         </td>
-                        <td width="15%">
-                        	内容
+                        <td width="10%">
+                        	手机号
                         </td >
-                        <td width="15%">
-                        	发布日期
+                        <td width="12%">
+                        	日期
                         </td> 
-                        <td width="15%">
-                        	类别
+                        <td width="8%">
+                        	周期
                         </td> 
-                        <td width="15%">
-                        	推送tags
-                        </td> 
-                        <td width="15%">
-                        	推送时间
+                        <td width="32%">
+                        	地址
                         </td> 
                         <td width="10%">
-                        	操作
+                        	回收人手机号
+                        </td> 
+                        <td width="10%">
+                        	类型
+                        </td>
+                        <td width="10%">
+                        	状态
                         </td>
                     </tr>
                     <%if(pdr!=null&&pdr.length>0){
@@ -70,60 +72,52 @@ pdr = udi.getRecycle();
                      class="info"
                      <%} %>
                     >
-                    	<td width="15%">
+                    	<td width="8%">
                         	<%out.print(pdr[i].getDailyrecycle_name()); %>
                         </td>
-                        <td width="15%">
-                        	<%out.print(pdr[i].getDailyrecycle_date()); %>
-                        </td >
-                        <td width="15%">
+                        <td width="10%">
                         	<%out.print(pdr[i].getDailyrecycle_user_mobile()); %>
+                        </td >
+                        <td width="12%">
+                        	<%out.print(pdr[i].getDailyrecycle_date()); %>
                         </td> 
-                        <td width="15%">
+                        <td width="8%">
                         <%
-                        if(pdr[i].getDailyrecycle_user_mobile().equals("laonianjibing")){
-                        %>
-                        		老年疾病
-                        <%}
-                        if(pdr[i].getDailyrecycle_user_mobile().equals("laonianyongyao")){
-                        %>
-                        		老年用药
-                        <%}
-                        if(pdr[i].getDailyrecycle_user_mobile().equals("laonianhuli")){                       
-                        %>
-                        		老年护理
-                        <%}%>
-                        </td> 
-                        <td width="15%">
-                        
-                        	<%if(pdr[i].getDailyrecycle_user_mobile()==""&&pdr[i].getDailyrecycle_user_mobile()==""){
-                        	%>
-                        		暂未推送
+                        if(pdr[i].getDailyrecycle_iscycle().equals("1")){
+							if(pdr[i].getDailyrecycle_cycletype().equals("0")){
+		                    %>
+                        		每周
                         	<%
-                        	}else{
-                        		out.print(pdr[i].getDailyrecycle_user_mobile()); 
-                        	}%>
-                        </td> 
-                        <td width="15%">
-                            <%if(pdr[i].getDailyrecycle_user_mobile()==""&&pdr[i].getDailyrecycle_user_mobile()==""){
-                        	%>
-                        		暂未推送
+							}else{
+			                %>
+                        		每月
                         	<%
-                        	}else{
-                        		out.print(pdr[i].getDailyrecycle_user_mobile()); 
-                        	}%>
+							}
+                        }else{
+			                %>
+                    			非周期
+                    		<%
+                        }%>
+                        </td> 
+                        <td width="32%">                        
+                        	<%out.print(pdr[i].getDailyrecycle_address()); %>
                         </td> 
                         <td width="10%">
-                            <%if(pdr[i].getDailyrecycle_user_mobile()==""&&pdr[i].getDailyrecycle_user_mobile()==""){
+							<%out.print(pdr[i].getDailyrecycle_recyclingmanphone()); %>
+                        </td> 
+                        <td width="10%">
+							<%out.print(pdr[i].getDailyrecycle_type()); %>                        	
+                        </td>
+                           <td width="10%">
+                            <%if(pdr[i].getDailyrecycle_status().equals("0")){
                         	%>
-                        	<a href="jpushContentListPush.jsp?title=<%=pdr[i].getDailyrecycle_user_mobile()%>&content=<%=pdr[i].getDailyrecycle_user_mobile()%>&id=<%=pdr[i].getDailyrecycle_user_mobile()%>">操作</a>
+                        	<a href="javascript:confirm(<%=pdr[i].getDailyrecycle_id()%>);" target="_blank">订单未完成</a>
                         	<%
                         	}else{
                             	%>
-                        		推送完成
+                        		订单完成
                         		<%
-                        	}%>
-                        	
+                        	}%>                        	
                         </td>
                     </tr>
                     <%}
@@ -132,4 +126,10 @@ pdr = udi.getRecycle();
             </table>
         </form>
     </body>
+<script type="text/javascript">
+	function confirm(id)
+	{
+		window.open ("jpushContentListPush.jsp?id="+id, "", "height=700, width=800"); 
+	}
+</script>
 </html>

@@ -1,17 +1,95 @@
 package com.pg.web;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
+import cn.jpush.api.JPushClient;
+import cn.jpush.api.push.model.Platform;
+import cn.jpush.api.push.model.PushPayload;
+import cn.jpush.api.push.model.audience.Audience;
+import cn.jpush.api.push.model.notification.Notification;
 
+import com.pg.bean.Pgdr_user;
 import com.pg.bean.Ppdr_dailyrecycle;
 import com.pg.db.GetConn;
 
 public class OrderManager {
+	
+	private static final String appKey = "a21bcb87918d9c6c5f28d05a";   //7004f4cfd9fbb5ff19cc1a7d    cai 934ee5200b34ec97d469a7f1
+	private static final String masterSecret = "3984c07df41e404e579c81f6"; 
+	JPushClient jpushClient = new JPushClient(masterSecret, appKey);
+	
+	public int updateUser(String id,String photonumber)
+	{
+		GetConn getConn=new GetConn();
+		int i = 0;
+		Connection conn=getConn.getConnection();
+		try {
+			PreparedStatement ps=conn.prepareStatement("update PGDR_DAILYRECYCLE "
+													+ "set DAILYRECYCLE_RECYCLINGMANPHONE = ? "
+													+ "where DAILYRECYCLE_ID = ? "
+													);
+			ps.setString(1,photonumber);
+			ps.setString(2,id);		
+			System.out.println("=updateUser="+ps.toString());
+			i=ps.executeUpdate();
+			if(i>0){
+				PushPayload.newBuilder()
+                .setPlatform(Platform.all())
+                .setAudience(Audience.alias(photonumber))
+                .setNotification(Notification.alert("您有一个订单需要提取！"))
+                .build();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		getConn.closeconn(conn);
+		return i;		
+	}
+	
+	public Pgdr_user[] getUsers() 
+	{
+		int rows;
+		GetConn getConn=new GetConn();
+		ResultSet rs = null;
+		Connection conn=getConn.getConnection();
+		Pgdr_user[] pusers = null;
+		try {
+			PreparedStatement ps=conn.prepareStatement("select USER_ID,USER_MOBILE,USER_NAME,USER_PASSWORD"
+					+ ",USER_ADDRESS,USER_EMAIL,USER_STATUS,USER_TYPE,USER_PHOTO"
+					+ " from PGDR_USER where USER_TYPE = '1'");
+			rs=ps.executeQuery();
+			if(rs!=null){    		
+	    		rs.last();
+	    		rows = rs.getRow();
+	    		rs.beforeFirst();
+	    		pusers = new Pgdr_user[rows];
+	    		for(int i=0;i<rows;i++)
+		    	{	    			
+		    		rs.next();
+		    		pusers[i] = new Pgdr_user();
+		    		pusers[i].setUser_id(rs.getString("USER_ID"));
+		    		pusers[i].setUser_name(rs.getString("USER_NAME"));
+		    		pusers[i].setUser_password(rs.getString("USER_PASSWORD"));
+		    		pusers[i].setUser_mobile(rs.getString("USER_MOBILE"));
+		    		pusers[i].setUser_address(rs.getString("USER_ADDRESS"));
+		    		pusers[i].setUser_email(rs.getString("USER_EMAIL"));
+		    		pusers[i].setUser_status(rs.getString("USER_STATUS"));
+		    		pusers[i].setUser_type(rs.getString("USER_TYPE"));
+		    		pusers[i].setUser_photo(rs.getString("USER_PHOTO"));
+		    		pusers[i].setUser_return(true);
+		    	}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return pusers;
+	}
+	
+	
 	public Ppdr_dailyrecycle[] getRecycle() 
 	{
 		GetConn getConn=new GetConn();

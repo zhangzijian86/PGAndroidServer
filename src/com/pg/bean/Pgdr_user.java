@@ -9,7 +9,7 @@ public class Pgdr_user {
 	private String user_address;//USER_ADDRESS
 	private String user_email;//USER_EMAIL
 	private String user_status;//USER_STATUS 用户状态 -1 删除 0 禁用  1 正常   
-	private String user_type;//USER_TYPE 用户类型 0 普通用户 1小贩
+	private String user_type;//USER_TYPE 用户类型 0 普通用户 1小贩  9在申请状态用户
 	private String user_photo;//USER_PHOTO
 	private boolean user_return;//返回值
 	
