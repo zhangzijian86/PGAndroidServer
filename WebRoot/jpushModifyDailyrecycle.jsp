@@ -32,6 +32,7 @@ if(pdr!=null){
 	dailyrecycle_type = pdr.getDailyrecycle_type();
 	dailyrecycle_explain = pdr.getDailyrecycle_explain();
 	dailyrecycle_address = pdr.getDailyrecycle_address();
+	dailyrecycle_recyclingmanphone = pdr.getDailyrecycle_recyclingmanphone();
 }
 %>
 <html>
@@ -79,33 +80,107 @@ if(pdr!=null){
                         <td>
                         	<label class="control-label" for="inputEmail">回收日期</label>
 							<div class="controls">
-								<input class="input-xxlarge" type="text" id="huishouriqi" size="10"  placeholder="回收日期"  value =<%=dailyrecycle_date %> >
+								<input class="input-xxlarge" type="text" id="huishouriqi" size="10"  placeholder="回收日期"  value ="<%=dailyrecycle_date %>" >
 							</div>
                         </td>
                     </tr>                
-                    
-                    
-                    
-                    <tr>
-                    	<td>
-                            <label class="control-label" for="inputEmail">内容</label>
-                            <div class="controls">
-                                <textarea class="input-xxlarge" rows="10" placeholder="内容" required id="contenttest"></textarea>
-                            </div>
+                                            <%
+                        if(dailyrecycle_iscycle.equals("1")){
+							if(dailyrecycle_cycletype.equals("0")){
+		                    %>
+                        	<tr>
+	                        <td>
+	                        	<label class="control-label" for="inputEmail">周期</label>
+								<div class="controls">
+									<input class="input-xxlarge" type="text" id="huishouriqi" readonly size="10"  placeholder="每周"  value ="每周" >
+								</div>
+	                        </td>
+                    		</tr>  
+                        	<%
+							}else{
+			                %>
+			             <tr>
+	                        <td>
+	                        	<label class="control-label" for="inputEmail">周期</label>
+								<div class="controls">
+									<input class="input-xxlarge" type="text" id="huishouriqi" size="10" readonly placeholder="每月"  value ="每月" >									
+								</div>
+	                        </td>
+                    		</tr>                        		
+                        	<%
+							}
+                        }else{
+			                %>
+                    	<tr>
+                        <td>
+                        	<label class="control-label" for="inputEmail">周期</label>
+							<div class="controls">
+								<input class="input-xxlarge" type="text" id="huishouriqi" size="10" readonly placeholder="非周期"  value ="非周期" >							
+							</div>
                         </td>
                     </tr>
-                    <tr>
-                    	<td>
-                            <label class="control-label" for="inputEmail" >分组</label>
+                    <%
+                        }
+						if(dailyrecycle_status.equals("0")){
+		             %>
+                        	<tr>
+	                        <td>
+	                        	<label class="control-label" for="inputEmail">状态</label>
+								<div class="controls">
+									<input class="input-xxlarge" type="text" id="huishouriqi" readonly size="10"  placeholder="未完成"  value ="未完成" >
+								</div>
+	                        </td>
+                    		</tr>  
+                        	<%}else{%>
+                        	  <tr>
+	                        <td>
+	                        	<label class="control-label" for="inputEmail">状态</label>
+								<div class="controls">
+									<input class="input-xxlarge" type="text" id="huishouriqi" readonly size="10"  placeholder="已完成"  value ="已完成" >
+								</div>
+	                        </td>
+                    		</tr>  
+                    		<tr>
+	                        <td>
+	                        	<label class="control-label" for="inputEmail">完成时间</label>
+								<div class="controls">
+									<input class="input-xxlarge" type="text" id="huishouriqi" readonly size="10"    value ="<%=dailyrecycle_finishtime %>">
+								</div>
+	                        </td>
+                    		</tr>
+                    		<%}%>
+                    		<tr>
+	                        <td>
+	                        	<label class="control-label" for="inputEmail">类型</label>
+								<div class="controls">
+									<input class="input-xxlarge" type="text" id="leixing"  size="10" placeholder="类型"   value ="<%=dailyrecycle_type %>">
+								</div>
+	                        </td>
+                    		</tr>
+                    		<tr>
+	                        <td>
+	                        	<label class="control-label" for="inputEmail">回收人手机号</label>
+								<div class="controls">
+									<input class="input-xxlarge" type="text" id="huishourenshoujihao"  size="10" readonly placeholder="回收人手机号"   value ="<%=dailyrecycle_recyclingmanphone %>">
+								</div>
+	                        </td>
+                    		</tr>
+                    		<tr>
+	                        <td>
+	                        	<label class="control-label" for="inputEmail">备注</label>
+								<div class="controls">
+									<input class="input-xxlarge" type="text" id="beizhu"  size="10" placeholder="备注"   value ="<%=dailyrecycle_explain %>">
+								</div>
+	                        </td>
+                    		</tr>
+                    	<tr>                    
+                    		<td>
+                      		<label class="control-label" for="inputEmail">地址</label>
                             <div class="controls">
-                                <select id="grouptest">
-                                    <option value="laonianjibing">老年疾病</option>
-                                    <option value="laonianyongyao">老年用药</option>
-                                    <option value="laonianhuli">老年护理</option>
-                                </select>
+                                <textarea class="input-xxlarge" id="dizhi"  rows="3" placeholder="地址"  ><%=dailyrecycle_address%></textarea>
                             </div>
-                        </td>
-                    </tr>
+                        	</td>
+                     </tr>                
                     <tr>
                     	<td>
                         	<div class="controls">                        	    
@@ -113,7 +188,6 @@ if(pdr!=null){
                         	    <input type="hidden" value="" name="content" id ="content" >
                         	    <input type="hidden" value="" name="group" id ="group" >
                                 <button class="btn btn-primary"  type="button" onclick="confirm()">确定</button>
-                                <button class="btn btn-primary" type="button" onclick="cancel()">取消</button>
                             </div>
                         </td>
                     </tr>
@@ -121,42 +195,38 @@ if(pdr!=null){
             </table>
         </form>
     </body>
-</html>
 <script type="text/javascript">
-	$('.form_datetime').datetimepicker({
-        language:  'zh-CN',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		forceParse: 0,
-        showMeridian: 1
-    });
 	function confirm()
 	{
-		var titletest = document.getElementById("titletest");
-		var contenttest = document.getElementById("contenttest");
-		var grouptest = document.getElementById("grouptest");
-		
-		var index = grouptest.selectedIndex; // 选中索引
-		var text = grouptest.options[index].text; // 选中文本
-		var value = grouptest.options[index].value;
-		
-		//alert("=="+index+"=="+text+"=="+value);	
-		var title  = document.getElementById("title");
-		var content  = document.getElementById("content");
-		var group = document.getElementById("group"); 
-		
-		title.value=titletest.value;
-		content.value=contenttest.value;
-		group.value=value;		
-        //alert("==confirm=="+title.value+"="+grouptest.value+"="+content.value+"=="+grouptest.value+"==="+group.value);
-        document.form1.submit();
-	}
-	function cancel()
-	{
-		document.write("==========cancel============");
-		//document.form1.submit();
+		var xingming = document.getElementById("xingming");
+		var shoujihao = document.getElementById("shoujihao");
+		var huishouriqi = document.getElementById("huishouriqi");
+		var leixing =  document.getElementById("leixing");
+		var beizhu =  document.getElementById("beizhu");
+		var dizhi =  document.getElementById("dizhi");
+	    $.ajax({
+	        type: "Post",
+	        url: "jpushModifyDailyrecycleResult.jsp?id="+<%=id%>+"&xingming="+xingming.value
+	        		+"&shoujihao="+shoujihao.value+"&huishouriqi="+huishouriqi.value
+	        		+"&leixing="+leixing.value+"&beizhu="+beizhu.value+"&dizhi="+dizhi.value,
+	        dataType: "html",
+	        data: {
+	            //organiseUnitID: selorganiseUnitID,
+	            //CharType: 'CockiptTrendChange'
+	        },
+	        success: function (data) {
+	        	if(data>0){
+	        		window.opener.location.href = window.opener.location.href;
+	        		window.close();  
+	        	}else{
+	        		alert("修改订单信息失败");
+	        	}
+	        },
+	       error: function( msg ) { 
+	    	   alert("修改订单信息失败"); 
+	        }
+		});		
 	}
 </script>
+</html>
+

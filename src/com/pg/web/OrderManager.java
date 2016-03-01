@@ -282,4 +282,35 @@ public class OrderManager {
 		}
 		return pdr;
 	}
+	
+	public int updateRecycle(Ppdr_dailyrecycle pdr)
+	{
+		GetConn getConn=new GetConn();
+		int i = 0;
+		Connection conn=getConn.getConnection();
+		try {
+			PreparedStatement ps=conn.prepareStatement("update PGDR_DAILYRECYCLE "
+													+ "set DAILYRECYCLE_NAME = ?, "
+													+ "DAILYRECYCLE_USER_MOBILE = ?, "
+													+ "DAILYRECYCLE_DATE = ?, "
+													+ "DAILYRECYCLE_TYPE = ?, "
+													+ "DAILYRECYCLE_EXPLAIN = ?, "
+													+ "DAILYRECYCLE_ADDRESS = ? "
+													+ "where DAILYRECYCLE_ID = ? "
+													);
+			ps.setString(1,pdr.getDailyrecycle_name());	
+			ps.setString(2,pdr.getDailyrecycle_user_mobile());	
+			ps.setString(3,pdr.getDailyrecycle_date());	
+			ps.setString(4,pdr.getDailyrecycle_type());	
+			ps.setString(5,pdr.getDailyrecycle_explain());	
+			ps.setString(6,pdr.getDailyrecycle_address());	
+			ps.setString(7,pdr.getDailyrecycle_id());	
+			System.out.println("=updateRecycle=sql="+ps.toString());
+			i=ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		getConn.closeconn(conn);
+		return i;		
+	}
 }
