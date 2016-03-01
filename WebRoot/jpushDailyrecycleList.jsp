@@ -29,7 +29,7 @@ pdr = udi.getRecycle();
                 	<tr>
                         <th colspan="2"><h3>订单数据列表</h3></th>
                         <th colspan="5"></th>
-                        <th><h3><a href="jpushContentNewPush.jsp">新数据推送</a></h3></th>                        
+                        <th><h3><a href="jpushUserList.jsp">取货人员审核</a></h3></th>                        
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +73,7 @@ pdr = udi.getRecycle();
                      <%} %>
                     >
                     	<td width="8%">
-                        	<%out.print(pdr[i].getDailyrecycle_name()); %>
+                    	<a href="javascript:modify(<%=pdr[i].getDailyrecycle_id()%>);" target="_blank"><%out.print(pdr[i].getDailyrecycle_name()); %></a>                        	
                         </td>
                         <td width="10%">
                         	<%out.print(pdr[i].getDailyrecycle_user_mobile()); %>
@@ -129,7 +129,11 @@ pdr = udi.getRecycle();
 <script type="text/javascript">
 	function confirm(id)
 	{
-		window.open ("jpushContentListPush.jsp?id="+id, "", "height=700, width=800"); 
+		window.open ("jpushDailyrecycleManList.jsp?id="+id, "", "height=700, width=800"); 
+	}
+	function modify(id)
+	{
+		window.open ("jpushModifyDailyrecycle.jsp?id="+id, "", "height=700, width=800"); 
 	}
 </script>
 </html>

@@ -12,7 +12,7 @@ public class Ppdr_dailyrecycle {
 	private String dailyrecycle_isvalid;//DAILYRECYCLE_ISVALID 是否是有效 1 有效 0 无效
 	private String dailyrecycle_status;//DAILYRECYCLE_STATUS 状态  1 完成 0未完成
 	private String dailyrecycle_recyclingmanphone;//DAILYRECYCLE_RECYCLINGMANPHONE 回收人手机
-	private String dailyrecycle_finishtime;//DAILYRECYCLE_FINISHTIME 回收人手机
+	private String dailyrecycle_finishtime;//DAILYRECYCLE_FINISHTIME 完成时间
 	private String dailyrecycle_type;//DAILYRECYCLE_TYPE 类型  手机 易拉罐等
 	private String dailyrecycle_explain;//DAILYRECYCLE_EXPLAIN 说明 几斤 几个 型号	
 	private String dailyrecycle_address;//DAILYRECYCLE_ADDRESS

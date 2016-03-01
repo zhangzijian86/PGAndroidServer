@@ -5,15 +5,14 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-String id= new String(request.getParameter("id").getBytes("ISO-8859-1"),"utf-8");
 Pgdr_user [] pu = null;
 OrderManager om = new OrderManager();
-pu = om.getUsers();
+pu = om.getApplyUsers();
 %>
 <html>
 <head>
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    	<title>选择提货人员</title>
+    	<title>申请人员列表</title>
     	<!-- Bootstrap -->
     	<link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/bootstrap-responsive.css" rel="stylesheet">
@@ -28,15 +27,11 @@ pu = om.getUsers();
         	<table class="table table-hover table-bordered">
             	<thead>
                 	<tr>
-                        <th colspan="2"><h3>提货人员列表</h3></th>
-                        <th colspan="2" align="right"><button class="btn btn-primary"  type="button" onclick="confirm()">确定</button></th>                        
+                        <th colspan="4"><h3>申请人员列表</h3></th>                       
                     </tr>
                 </thead>
                 <tbody>
 				 <tr class="warning">
-				        <td width="15%">
-                        	
-                        </td>
                     	<td width="15%">
                         	姓名
                         </td>
@@ -46,6 +41,9 @@ pu = om.getUsers();
                         <td width="50%">
                         	地址
                         </td> 
+                        <td width="15%">
+                        	审核状态
+                        </td>
                     </tr>
                     <%if(pu!=null&&pu.length>0){
 						for(int i = 0;i<pu.length;i++){ %>
@@ -60,17 +58,29 @@ pu = om.getUsers();
                      class="info"
                      <%} %>
                     >
-                    	<td width="8%">
-                        	<input type="radio" id="phone" name = "phonenumber" value="<%=pu[i].getUser_mobile()%>">
-                        </td>
-                    	<td width="8%">
+                    	<td width="15%">
                         	<%out.print(pu[i].getUser_name()); %>
                         </td>
-                        <td width="10%">
+                        <td width="20%">
                         	<%out.print(pu[i].getUser_mobile()); %>
                         </td >
-                        <td width="12%">
+                        <td width="50%">
                         	<%out.print(pu[i].getUser_address()); %>
+                        </td>
+                        <td width="15%">                        	
+                        	<%if(pu[i].getUser_type().equals("1")){
+                        	%>
+                        		<a href="javascript:confirm(<%=pu[i].getUser_mobile()%>);" target="_blank">审核通过</a>
+                        	<%
+                        	}else if(pu[i].getUser_type().equals("2")){
+                            	%>
+                        		已审核通过的小贩
+                        		<%
+                        	}else{
+                            	%>
+                        		普通用户
+                        		<%
+                        	}%>             
                         </td>  
                     </tr>
                     <%}
@@ -81,46 +91,27 @@ pu = om.getUsers();
     </body>
 <script type="text/javascript" src="js/jquery-1.4.1.js"></script>
 <script type="text/javascript">
-	function confirm()
+	function confirm(phonenumber)
 	{
-		var radios = document.getElementsByName("phonenumber");  
-		var flag = 0;		
-		var phonenumber = 0;		
-		for(var i=0;i<radios.length;i++)  
-	    {   
-	        //判断那个单选按钮为选中状态  
-	        if(radios[i].checked)  
-	        {  
-	            //弹出选中单选按钮的值  
-	            phonenumber = radios[i].value;
-	            flag++;
-	        }   
-	    }	
-		if(flag==0){
-			alert("请选择提货人员！");
-		}else{
-		    $.ajax({
-		        type: "Post",
-		        url: "jpushContentListPushResult.jsp?id="+<%=id%>+"&phonenumber="+phonenumber,
-		        dataType: "html",
-		        data: {
-		            //organiseUnitID: selorganiseUnitID,
-		            //CharType: 'CockiptTrendChange'
-		        },
-		        success: function (data) {
-		        	if(data>0){
-		        		window.opener.location.href = window.opener.location.href;
-		        		window.close();  
-		        	}else{
-		        		alert("分配提货人员失败");
-		        	}
-		        },
-		       error: function( msg ) { 
-		    	   window.opener.location.href = window.opener.location.href;
-	        		window.close();  
-		        }
-			});
-		}
+		$.ajax({
+			type : "Post",
+			url : "jpushUserListResult.jsp?phonenumber="+ phonenumber,
+			dataType : "html",
+			data : {
+			//organiseUnitID: selorganiseUnitID,
+			//CharType: 'CockiptTrendChange'
+			},
+			success : function(data) {
+				if (data > 0) {
+					window.location.reload();
+				} else {
+					alert("审核失败请重试");
+				}
+			},
+			error : function(msg) {
+				alert("审核失败请重试");
+			}
+		});
 	}
 </script>
 </html>
