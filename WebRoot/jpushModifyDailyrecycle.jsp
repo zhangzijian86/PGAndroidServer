@@ -76,14 +76,15 @@ if(pdr!=null){
 							</div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                        	<label class="control-label" for="inputEmail">回收日期</label>
-							<div class="controls">
-								<input class="input-xxlarge" type="text" id="huishouriqi" size="10"  placeholder="回收日期"  value ="<%=dailyrecycle_date %>" >
-							</div>
-                        </td>
-                    </tr>                
+                    <tr id="timingtr" >
+                    	      <td width="100%">
+                               <label class="control-label" for="inputEmail" >回收日期</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <div class="input-append date form_datetime" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="dtp_input1">
+                                <input size="16" type="text" value="<%=dailyrecycle_date %>" id="huishouriqi">
+                                <span class="add-on"><i class="icon-th"></i></span>
+                               </div>
+                             </td>
+                            </tr>               
                                             <%
                         if(dailyrecycle_iscycle.equals("1")){
 							if(dailyrecycle_cycletype.equals("0")){
@@ -196,6 +197,16 @@ if(pdr!=null){
         </form>
     </body>
 <script type="text/javascript">
+$('.form_datetime').datetimepicker({
+    language:  'zh-CN',
+    weekStart: 1,
+    todayBtn:  1,
+	autoclose: 1,
+	todayHighlight: 1,
+	startView: 2,
+	forceParse: 0,
+    showMeridian: 1
+});
 	function confirm()
 	{
 		var xingming = document.getElementById("xingming");
