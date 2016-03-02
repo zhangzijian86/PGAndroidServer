@@ -34,12 +34,12 @@ pdr = udi.getRecycle();
                 </thead>
                 <tbody>
 				 <tr class="warning">
-                    	<td width="8%">
-                        	姓名
-                        </td>
                         <td width="10%">
                         	手机号
                         </td >
+                        <td width="8%">
+                        	姓名
+                        </td>
                         <td width="12%">
                         	日期
                         </td> 
@@ -72,14 +72,25 @@ pdr = udi.getRecycle();
                      class="info"
                      <%} %>
                     >
-                    	<td width="8%">
-                    	<a href="javascript:modify(<%=pdr[i].getDailyrecycle_id()%>);" target="_blank"><%out.print(pdr[i].getDailyrecycle_name()); %></a>                        	
-                        </td>
+
                         <td width="10%">
-                        	<%out.print(pdr[i].getDailyrecycle_user_mobile()); %>
+                        	<a href="javascript:modify(<%=pdr[i].getDailyrecycle_id()%>);" target="_blank"><%out.print(pdr[i].getDailyrecycle_user_mobile()); %></a>         
                         </td >
+                        <td width="8%">
+                            <%
+                    		if(pdr[i].getDailyrecycle_name()==null){
+                    			
+                    		}else{
+                    			out.print(pdr[i].getDailyrecycle_name());
+                    		} %>             	
+                        </td>
                         <td width="12%">
-                        	<%out.print(pdr[i].getDailyrecycle_date()); %>
+                            <%
+                    		if(pdr[i].getDailyrecycle_date()==null){
+                    			
+                    		}else{
+                    			out.print(pdr[i].getDailyrecycle_date());
+                    		} %>  
                         </td> 
                         <td width="8%">
                         <%
@@ -100,10 +111,20 @@ pdr = udi.getRecycle();
                         }%>
                         </td> 
                         <td width="32%">                        
-                        	<%out.print(pdr[i].getDailyrecycle_address()); %>
+                        	<%
+                    		if(pdr[i].getDailyrecycle_address()==null){
+                    			
+                    		}else{
+                    			out.print(pdr[i].getDailyrecycle_address());
+                    		} %>
                         </td> 
                         <td width="10%">
-							<%out.print(pdr[i].getDailyrecycle_recyclingmanphone()); %>
+                            <%
+                    		if(pdr[i].getDailyrecycle_recyclingmanphone()==null){
+                    			
+                    		}else{
+                    			out.print(pdr[i].getDailyrecycle_recyclingmanphone());
+                    		} %>
                         </td> 
                         <td width="10%">
 							<%out.print(pdr[i].getDailyrecycle_type()); %>                        	

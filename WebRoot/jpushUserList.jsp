@@ -33,12 +33,12 @@ pu = om.getApplyUsers();
                 </thead>
                 <tbody>
 				 <tr class="warning">
-                    	<td width="15%">
-                        	姓名
-                        </td>
                         <td width="20%">
                         	手机号
                         </td >
+                       <td width="15%">
+                        	姓名
+                        </td>
                         <td width="50%">
                         	地址
                         </td> 
@@ -59,14 +59,25 @@ pu = om.getApplyUsers();
                      class="info"
                      <%} %>
                     >
-                    	<td width="15%">
-                    	<a href="javascript:modify(<%=pu[i].getUser_id()%>);" target="_blank"><%out.print(pu[i].getUser_name()); %></a>
-                        </td>
                         <td width="20%">
-                        	<%out.print(pu[i].getUser_mobile()); %>
+                        	<a href="javascript:modify(<%=pu[i].getUser_id()%>);" target="_blank"><%out.print(pu[i].getUser_mobile()); %></a>
                         </td >
+                        <td width="15%">
+                    		<%
+                    		if(pu[i].getUser_name()==null){
+                    			
+                    		}else{
+                    			out.print(pu[i].getUser_name());
+                    		}
+                    		 %>
+                        </td>
                         <td width="50%">
-                        	<%out.print(pu[i].getUser_address()); %>
+                        	<%
+                    		if(pu[i].getUser_address()==null){
+                    			
+                    		}else{
+                    			out.print(pu[i].getUser_address());
+                    		} %>
                         </td>
                         <td width="15%">                        	
                         	<%if(pu[i].getUser_type().equals("1")){
