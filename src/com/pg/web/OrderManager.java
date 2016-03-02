@@ -1,6 +1,5 @@
 package com.pg.web;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +23,67 @@ public class OrderManager {
 	private static final String appKey = "a21bcb87918d9c6c5f28d05a";   //7004f4cfd9fbb5ff19cc1a7d    cai 934ee5200b34ec97d469a7f1
 	private static final String masterSecret = "3984c07df41e404e579c81f6"; 
 	JPushClient jpushClient = new JPushClient(masterSecret, appKey);
+	
+	public Pgdr_user getOneUser(String id) 
+	{
+		GetConn getConn=new GetConn();
+		ResultSet rs = null;
+		Connection conn=getConn.getConnection();
+		Pgdr_user puser = null;
+		try {
+			PreparedStatement ps=conn.prepareStatement("select USER_ID,USER_MOBILE,USER_NAME,USER_PASSWORD"
+					+ ",USER_ADDRESS,USER_EMAIL,USER_STATUS,USER_TYPE,USER_PHOTO"
+					+ " from PGDR_USER where USER_ID = ? and USER_STATUS = 1");
+			ps.setString(1,id);
+			rs=ps.executeQuery();
+			if(rs!=null){    					
+	    		rs.next();
+	    		puser = new Pgdr_user();
+	    		puser.setUser_id(rs.getString("USER_ID"));
+	    		puser.setUser_name(rs.getString("USER_NAME"));
+	    		puser.setUser_password(rs.getString("USER_PASSWORD"));
+	    		puser.setUser_mobile(rs.getString("USER_MOBILE"));
+	    		puser.setUser_address(rs.getString("USER_ADDRESS"));
+	    		puser.setUser_email(rs.getString("USER_EMAIL"));
+	    		puser.setUser_status(rs.getString("USER_STATUS"));
+	    		puser.setUser_type(rs.getString("USER_TYPE"));
+	    		puser.setUser_photo(rs.getString("USER_PHOTO"));
+	    		puser.setUser_return(true);
+		    
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return puser;
+	}
+	
+	public int updateOneUser(Pgdr_user pu)
+	{
+		GetConn getConn=new GetConn();
+		int i = 0;
+		Connection conn=getConn.getConnection();
+		try {
+			PreparedStatement ps=conn.prepareStatement("update PGDR_USER "
+													+ "set USER_NAME = ?, "
+													+ "USER_MOBILE = ?, "
+													+ "USER_EMAIL = ?, "
+													+ "USER_ADDRESS = ? "
+													+ "where USER_ID = ? "
+													);
+			
+			ps.setString(1,pu.getUser_name());	
+			ps.setString(2,pu.getUser_mobile());	
+			ps.setString(3,pu.getUser_email());	
+			ps.setString(4,pu.getUser_address());	
+			ps.setString(5,pu.getUser_id());
+			System.out.println("=updateOneUser=sql="+ps.toString());
+			i=ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		getConn.closeconn(conn);
+		return i;		
+	}
 	
 	public int updateUser(String id,String photonumber)
 	{

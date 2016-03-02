@@ -27,7 +27,8 @@ pu = om.getApplyUsers();
         	<table class="table table-hover table-bordered">
             	<thead>
                 	<tr>
-                        <th colspan="4"><h3>申请人员列表</h3></th>                       
+                        <th colspan="3"><h3>申请人员列表</h3></th>  
+                        <th><h3><a href="javascript:history.go(-1)">返回</a></h3></th>                                               
                     </tr>
                 </thead>
                 <tbody>
@@ -59,7 +60,7 @@ pu = om.getApplyUsers();
                      <%} %>
                     >
                     	<td width="15%">
-                        	<%out.print(pu[i].getUser_name()); %>
+                    	<a href="javascript:modify(<%=pu[i].getUser_id()%>);" target="_blank"><%out.print(pu[i].getUser_name()); %></a>
                         </td>
                         <td width="20%">
                         	<%out.print(pu[i].getUser_mobile()); %>
@@ -112,6 +113,10 @@ pu = om.getApplyUsers();
 				alert("审核失败请重试");
 			}
 		});
+	}
+	function modify(id)
+	{
+		window.open ("jpushModifyUser.jsp?id="+id, "", "height=700, width=800"); 
 	}
 </script>
 </html>
