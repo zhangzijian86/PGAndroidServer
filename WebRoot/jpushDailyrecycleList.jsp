@@ -94,20 +94,28 @@ pdr = udi.getRecycle();
                         </td> 
                         <td width="8%">
                         <%
-                        if(pdr[i].getDailyrecycle_iscycle().equals("1")){
-							if(pdr[i].getDailyrecycle_cycletype().equals("0")){
-		                    %>
-                        		每周
-                        	<%
-							}else{
-			                %>
-                        		每月
-                        	<%
-							}
-                        }else{
-			                %>
-                    			非周期
-                    		<%
+                        if(pdr[i].getDailyrecycle_iscycle()!=null){
+	                        if(pdr[i].getDailyrecycle_iscycle().equals("1")){
+	                        	 if(pdr[i].getDailyrecycle_cycletype()!=null){
+										if(pdr[i].getDailyrecycle_cycletype().equals("0")){
+					                    %>
+			                        		每周
+			                        	<%
+										}else{
+						                %>
+			                        		每月
+			                        	<%
+										}
+	                        	  }else{
+	                                  %>
+		                    			非周期
+		                    		<%
+	                        	  }
+	                        }else{
+				                %>
+	                    			非周期
+	                    		<%
+	                        	}
                         }%>
                         </td> 
                         <td width="32%">                        

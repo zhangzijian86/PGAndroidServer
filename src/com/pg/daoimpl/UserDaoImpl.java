@@ -229,29 +229,72 @@ public class UserDaoImpl
 			+ "?,?,?,"
 			+ "?,?,?,"
 			+ "?)"
-			);
-			System.out.println("====addRecycle=============44=====sql="+ps.toString());
-			ps.setString(1,pgdr_recycle.getDailyrecycle_user_mobile());
-			ps.setString(2,pgdr_recycle.getDailyrecycle_date());		
-			ps.setString(3,pgdr_recycle.getDailyrecycle_week());
-			ps.setString(4,pgdr_recycle.getDailyrecycle_iscycle());
-			ps.setString(5,pgdr_recycle.getDailyrecycle_cycletype());
-			ps.setString(6,pgdr_recycle.getDailyrecycle_isvalid());
-			ps.setString(7,pgdr_recycle.getDailyrecycle_status());
-			ps.setString(8,pgdr_recycle.getDailyrecycle_recyclingmanphone());
-			ps.setString(9,pgdr_recycle.getDailyrecycle_finishtime());
-			ps.setString(10,pgdr_recycle.getDailyrecycle_type());
-			ps.setString(11,pgdr_recycle.getDailyrecycle_explain());
-			String address = pgdr_recycle.getDailyrecycle_address();
-			System.out.println("====addRecycle=============55======");
-			try {
-				String addressstr = new String(address.getBytes("UTF-8"));
-				ps.setString(12,addressstr);
-				System.out.println("====UpdateUser=============66======"+addressstr);
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}			
-			ps.setString(13,pgdr_recycle.getDailyrecycle_name());
+			);			
+			if(pgdr_recycle.getDailyrecycle_user_mobile()!=null){
+				ps.setString(1,pgdr_recycle.getDailyrecycle_user_mobile());
+			}else{
+				ps.setString(1,null);
+			}
+			if(pgdr_recycle.getDailyrecycle_date()!=null){
+				ps.setString(2,pgdr_recycle.getDailyrecycle_date());		
+			}else{
+				ps.setString(2,null);
+			}
+			if(pgdr_recycle.getDailyrecycle_week()!=null){
+				ps.setString(3,pgdr_recycle.getDailyrecycle_week());
+			}else{
+				ps.setString(3,null);
+			}
+			if(pgdr_recycle.getDailyrecycle_iscycle()!=null){
+				ps.setString(4,pgdr_recycle.getDailyrecycle_iscycle());
+			}else{
+				ps.setString(4,null);
+			}	
+			if(pgdr_recycle.getDailyrecycle_cycletype()!=null){
+				ps.setString(5,pgdr_recycle.getDailyrecycle_cycletype());
+			}else{
+				ps.setString(5,null);
+			}	
+			ps.setString(6,"1");
+			ps.setString(7,"0");
+			if(pgdr_recycle.getDailyrecycle_recyclingmanphone()!=null){
+				ps.setString(8,pgdr_recycle.getDailyrecycle_recyclingmanphone());
+			}else{
+				ps.setString(8,null);
+			}				
+			if(pgdr_recycle.getDailyrecycle_finishtime()!=null){
+				ps.setString(9,pgdr_recycle.getDailyrecycle_finishtime());
+			}else{
+				ps.setString(9,null);
+			}
+			if(pgdr_recycle.getDailyrecycle_type()!=null){
+				ps.setString(10,pgdr_recycle.getDailyrecycle_type());
+			}else{
+				ps.setString(10,null);
+			}
+			if(pgdr_recycle.getDailyrecycle_explain()!=null){
+				ps.setString(11,pgdr_recycle.getDailyrecycle_explain());
+			}else{
+				ps.setString(11,null);
+			}	
+			if(pgdr_recycle.getDailyrecycle_address()!=null){
+				String address = pgdr_recycle.getDailyrecycle_address();
+				System.out.println("====addRecycle=============55======");
+				try {
+					String addressstr = new String(address.getBytes("UTF-8"));
+					ps.setString(12,addressstr);
+					System.out.println("====UpdateUser=============66======"+addressstr);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}	
+			}else{
+				ps.setString(12,":");
+			}
+			if(pgdr_recycle.getDailyrecycle_name()!=null){
+				ps.setString(13,pgdr_recycle.getDailyrecycle_name());
+			}else{
+				ps.setString(13,null);
+			}	
 			System.out.println("====addRecycle=============77====sql=="+ps.toString());
 			i=ps.executeUpdate();
 			if (i>0)
