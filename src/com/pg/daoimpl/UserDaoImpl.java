@@ -15,7 +15,7 @@ import com.pg.db.GetConn;
 
 public class UserDaoImpl 
 {
-	public Pgdr_user login(String usermobile,String password) 
+	public Pgdr_user login(String usermobile) 
 	{
 		boolean b = false;
 		GetConn getConn=new GetConn();
@@ -25,9 +25,8 @@ public class UserDaoImpl
 		try {
 			PreparedStatement ps=conn.prepareStatement("select USER_ID,USER_MOBILE,USER_NAME,USER_PASSWORD"
 					+ ",USER_ADDRESS,USER_EMAIL,USER_STATUS,USER_TYPE,USER_PHOTO"
-					+ " from PGDR_USER where USER_MOBILE=? and USER_PASSWORD=?");
+					+ " from PGDR_USER where USER_MOBILE=? ");
 			ps.setString(1,usermobile);
-			ps.setString(2,password);
 			rs=ps.executeQuery();
 			if (rs.next())
 			{
@@ -60,6 +59,24 @@ public class UserDaoImpl
 		ResultSet rs = null;
 		Connection conn=getConn.getConnection();
 		List<Ppdr_dailyrecycle> pdrlist = new ArrayList<Ppdr_dailyrecycle>();
+		
+		String uertype = "";
+		
+		
+		try {
+			PreparedStatement ps=conn.prepareStatement("select USER_ID,USER_MOBILE,USER_NAME,USER_PASSWORD"
+					+ ",USER_ADDRESS,USER_EMAIL,USER_STATUS,USER_TYPE,USER_PHOTO"
+					+ " from PGDR_USER where USER_MOBILE=? ");
+			ps.setString(1,phoneNumber);
+			rs=ps.executeQuery();
+			if (rs.next())
+			{
+				uertype = rs.getString("USER_TYPE");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		
 		try {
 			PreparedStatement ps=conn.prepareStatement(
 					  "select * from (select "
@@ -85,6 +102,7 @@ public class UserDaoImpl
 			ps.setString(1,phoneNumber);
 			ps.setString(2,phoneNumber);
 			System.out.println("=getRecycle=sql="+ps.toString());
+			System.out.println("===uertype===="+uertype);
 			rs=ps.executeQuery();
 			while (rs.next())
 			{
@@ -103,6 +121,7 @@ public class UserDaoImpl
 				pdr.setDailyrecycle_explain(rs.getString("DAILYRECYCLE_EXPLAIN"));				
 				pdr.setDailyrecycle_address(rs.getString("DAILYRECYCLE_ADDRESS"));
 				pdr.setDailyrecycle_name(rs.getString("DAILYRECYCLE_NAME"));
+				pdr.setUser_type(uertype);
 				pdrlist.add(pdr);
 			}
 		} catch (SQLException e) {
@@ -339,7 +358,7 @@ public class UserDaoImpl
 			{
 				System.out.println("====check=========99==========");
 				int i = 0;
-				PreparedStatement psin=conn.prepareStatement("insert into PGDR_USER (USER_MOBILE,USER_STATUS) values (?,1)");
+				PreparedStatement psin=conn.prepareStatement("insert into PGDR_USER (USER_MOBILE,USER_STATUS,USER_TYPE) values (?,1,0)");
 				psin.setString(1,user_mobile);
 				i=psin.executeUpdate();
 				if (i>0)

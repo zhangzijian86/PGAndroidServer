@@ -34,13 +34,11 @@ public class Login extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 	    PrintWriter out=response.getWriter();
 		String usermobile=request.getParameter("usermobile");
-		String password=request.getParameter("password");
 //		out.write("登录成功==0="+usermobile); 
 		System.out.println("====doPost=============usermobile======"+usermobile);
 //		out.write("登录成功==1="+password); 
-		System.out.println("====doPost=============password======"+password);
 		UserDaoImpl userDaoImpl=new UserDaoImpl();
-		Pgdr_user puser=userDaoImpl.login(usermobile,password);
+		Pgdr_user puser=userDaoImpl.login(usermobile);
 		List<Pgdr_user> list1=new ArrayList<Pgdr_user>();
 		Gson gson=new Gson();//利用google提供的gson将一个list集合写成json形式的字符串		
 		list1.add(puser);
