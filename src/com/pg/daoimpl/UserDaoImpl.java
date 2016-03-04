@@ -176,23 +176,60 @@ public class UserDaoImpl
 													+ "where USER_MOBILE = ? "
 													);
 			System.out.println("====UpdateUser=============44======");
-			ps.setString(1,pgdr_user.getUser_name());
-			ps.setString(2,pgdr_user.getUser_password());	
-			String address = pgdr_user.getUser_address();
-			System.out.println("====UpdateUser=============55======");
-			try {
-				String addressstr = new String(address.getBytes("UTF-8"));
-				ps.setString(3,addressstr);
-				System.out.println("====UpdateUser=============66======"+addressstr);
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}			
-			//ps.setString(3,pgdr_user.getUser_address());
-			ps.setString(4,pgdr_user.getUser_email());
-			ps.setString(5,pgdr_user.getUser_status());
-			ps.setString(6,pgdr_user.getUser_type());
-			ps.setString(7,pgdr_user.getUser_photo());
-			ps.setString(8,pgdr_user.getUser_mobile());
+			if(pgdr_user.getUser_name()!=null){
+				ps.setString(1,pgdr_user.getUser_name());
+			}else{
+				ps.setString(1,null);
+			}
+			if(pgdr_user.getUser_password()!=null){
+				ps.setString(2,pgdr_user.getUser_password());
+			}else{
+				ps.setString(2,null);
+			}
+			
+			if(pgdr_user.getUser_address()!=null){
+				String address = pgdr_user.getUser_address();
+				System.out.println("====UpdateUser=============55======");
+				try {
+					String addressstr = new String(address.getBytes("UTF-8"));
+					ps.setString(3,addressstr);
+					System.out.println("====UpdateUser=============66======"+addressstr);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}	
+			}else{
+				ps.setString(3,null);
+			}
+			
+			if(pgdr_user.getUser_email()!=null){
+				ps.setString(4,pgdr_user.getUser_email());
+			}else{
+				ps.setString(4,null);
+			}
+			
+			if(pgdr_user.getUser_status()!=null){
+				ps.setString(5,pgdr_user.getUser_status());
+			}else{
+				ps.setString(5,null);
+			}
+			
+			if(pgdr_user.getUser_type()!=null){
+				ps.setString(6,pgdr_user.getUser_type());
+			}else{
+				ps.setString(6,null);
+			}
+			
+			if(pgdr_user.getUser_photo()!=null){
+				ps.setString(7,pgdr_user.getUser_photo());
+			}else{
+				ps.setString(7,null);
+			}
+			
+			if(pgdr_user.getUser_mobile()!=null){
+				ps.setString(8,pgdr_user.getUser_mobile());
+			}else{
+				ps.setString(8,null);
+			}
 			System.out.println("====UpdateUser=============77====sql=="+ps.toString());
 			i=ps.executeUpdate();
 			if (i>0)
