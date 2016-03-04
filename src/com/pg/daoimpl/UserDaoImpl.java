@@ -350,7 +350,7 @@ public class UserDaoImpl
 					       "DAILYRECYCLE_STATUS ,"+
 					       "DAILYRECYCLE_RECYCLINGMANPHONE ,"+
 					       "DAILYRECYCLE_FINISHTIME ,"+
-					       "from PGDR_DAILYRECYCLE where DAILYRECYCLE_USER_MOBILE=? or DAILYRECYCLE_RECYCLINGMANPHONE =? order by DAILYRECYCLE_USER_MOBILE");
+					       "from PGDR_DAILYRECYCLE where DAILYRECYCLE_USER_MOBILE=? or DAILYRECYCLE_RECYCLINGMANPHONE =? and DAILYRECYCLE_ISVALID = 1  order by DAILYRECYCLE_USER_MOBILE");
           ps.setString(1, username);
 			ResultSet rs = ps.executeQuery();
           while (rs.next()){

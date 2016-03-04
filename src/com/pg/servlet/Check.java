@@ -57,6 +57,7 @@ public class Check extends HttpServlet {
 		}
 		else  //手机号不存在
 		{
+			 System.out.println("=====Check===doPost=======yanzhengma=00=");
 			 Random rd = new Random();
 			 int result =rd.nextInt(900000)+100000;
 			 String c="no"+result;
@@ -68,7 +69,8 @@ public class Check extends HttpServlet {
 			 map.put("mobiles",user_mobile);
 			 map.put("content",result+"");
 			 map.put("codeid", "3907");
-			 httpPost(postUrl, map);
+			 String aa = httpPost(postUrl, map);
+			 System.out.println("=====Check===doPost====11===yanzhengma=11="+aa);
 			 out.write(c);
 		}
 		out.flush();
