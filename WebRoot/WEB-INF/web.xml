@@ -45,6 +45,12 @@
     <display-name>This is the display name of my J2EE component</display-name>
     <servlet-name>GetRecycle</servlet-name>
     <servlet-class>com.pg.servlet.GetRecycle</servlet-class>
+  </servlet>  
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>GetPrice</servlet-name>
+    <servlet-class>com.pg.servlet.GetPrice</servlet-class>
   </servlet>
 
 
@@ -76,6 +82,10 @@
   <servlet-mapping>
     <servlet-name>GetRecycle</servlet-name>
     <url-pattern>/GetRecycle</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetPrice</servlet-name>
+    <url-pattern>/GetPrice</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>

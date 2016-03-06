@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pg.bean.Pgdr_price;
 import com.pg.bean.Pgdr_user;
 import com.pg.bean.Ppdr_dailyrecycle;
 import com.pg.db.GetConn;
@@ -51,6 +52,44 @@ public class UserDaoImpl
 			e.printStackTrace();
 		}
 		return puser;
+	}
+	
+	public List<Pgdr_price> getPrice(String pricetype) 
+	{
+		GetConn getConn=new GetConn();
+		ResultSet rs = null;
+		Connection conn=getConn.getConnection();
+		List<Pgdr_price> pdplist = new ArrayList<Pgdr_price>();
+		
+		String uertype = "";
+			
+		try {
+			PreparedStatement ps=conn.prepareStatement(
+					  "select "
+					+ "PRICE_ID,PRICE_NAME,PRICE_ISVALID,"
+					+ "PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN " 
+					+ "from PGDR_PRICE where PRICE_TYPE=?  and PRICE_ISVALID = 1"
+					);
+			ps.setString(1,pricetype);
+			System.out.println("=getPrice=sql="+ps.toString());
+			System.out.println("===uertype===="+uertype);
+			rs=ps.executeQuery();
+			while (rs.next())
+			{
+				Pgdr_price pdp = new Pgdr_price();
+				pdp.setPrice_id(rs.getString("PRICE_ID"));
+				pdp.setPrice_name(rs.getString("PRICE_NAME"));
+				pdp.setPrice_isvalid(rs.getString("PRICE_ISVALID"));
+				pdp.setPrice_type(rs.getString("PRICE_TYPE"));
+				pdp.setPrice_price(rs.getString("PRICE_PRICE"));
+				pdp.setPrice_explain(rs.getString("PRICE_EXPLAIN"));
+				pdplist.add(pdp);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("=getRecycle==pdrlist==="+pdplist.size());
+		return pdplist;
 	}
 	
 	public List<Ppdr_dailyrecycle> getRecycle(String phoneNumber) 
