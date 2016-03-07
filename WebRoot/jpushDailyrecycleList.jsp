@@ -28,8 +28,9 @@ pdr = udi.getRecycle();
             	<thead>
                 	<tr>
                         <th colspan="2"><h3>订单数据列表</h3></th>
-                        <th colspan="5"></th>
-                        <th><h3><a href="jpushUserList.jsp">取货人员审核</a></h3></th>                        
+                        <th colspan="4"></th>
+                        <th><h3><a href="jpushPriceList.jsp">价格列表</a></h3></th>   
+                        <th><h3><a href="jpushUserList.jsp">人员列表</a></h3></th>                        
                     </tr>
                 </thead>
                 <tbody>

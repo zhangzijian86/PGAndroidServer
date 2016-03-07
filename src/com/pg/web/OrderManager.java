@@ -14,6 +14,7 @@ import cn.jpush.api.push.model.PushPayload;
 import cn.jpush.api.push.model.audience.Audience;
 import cn.jpush.api.push.model.notification.Notification;
 
+import com.pg.bean.Pgdr_price;
 import com.pg.bean.Pgdr_user;
 import com.pg.bean.Ppdr_dailyrecycle;
 import com.pg.db.GetConn;
@@ -165,6 +166,44 @@ public class OrderManager {
 		return pusers;
 	}
 	
+	public Pgdr_price[] getPrices() 
+	{
+		int rows;
+		GetConn getConn=new GetConn();
+		ResultSet rs = null;
+		Connection conn=getConn.getConnection();
+		Pgdr_price[] pps = null;
+		try {
+			PreparedStatement ps=conn.prepareStatement("select "
+					+ "PRICE_ID,PRICE_NAME,PRICE_ISVALID,"
+					+ "PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN " 
+					+ "from PGDR_PRICE "
+					+ "where PRICE_ISVALID=1 "
+					+ "order by PRICE_ISVALID desc");
+			rs=ps.executeQuery();
+			if(rs!=null){    		
+	    		rs.last();
+	    		rows = rs.getRow();
+	    		rs.beforeFirst();
+	    		pps = new Pgdr_price[rows];
+	    		for(int i=0;i<rows;i++)
+		    	{	    			
+		    		rs.next();
+		    		pps[i] = new Pgdr_price();
+		    		pps[i].setPrice_id(rs.getString("PRICE_ID"));
+		    		pps[i].setPrice_name(rs.getString("PRICE_NAME"));
+		    		pps[i].setPrice_isvalid(rs.getString("PRICE_ISVALID"));
+		    		pps[i].setPrice_price(rs.getString("PRICE_PRICE"));
+		    		pps[i].setPrice_type(rs.getString("PRICE_TYPE"));
+		    		pps[i].setPrice_explain(rs.getString("PRICE_EXPLAIN"));
+		    	}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return pps;
+	}	
+	
 	public Pgdr_user[] getApplyUsers() 
 	{
 		int rows;
@@ -202,6 +241,26 @@ public class OrderManager {
 			e.printStackTrace();
 		}
 		return pusers;
+	}
+	
+	public int deletePrice(String id)
+	{
+		GetConn getConn=new GetConn();
+		int i = 0;
+		Connection conn=getConn.getConnection();
+		try {
+			PreparedStatement ps=conn.prepareStatement("update PGDR_PRICE "
+													+ "set PRICE_ISVALID = 0 "
+													+ "where PRICE_ID = ? "
+													);
+			ps.setString(1,id);	
+			System.out.println("=deletePrice=sql="+ps.toString());
+			i=ps.executeUpdate();			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		getConn.closeconn(conn);
+		return i;		
 	}
 	
 	public int updateUserType(String photonumber)
