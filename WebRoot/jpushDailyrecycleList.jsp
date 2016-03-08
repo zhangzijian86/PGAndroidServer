@@ -136,10 +136,15 @@ pdr = udi.getRecycle();
                     		} %>
                         </td> 
                         <td width="10%">
-							<%out.print(pdr[i].getDailyrecycle_type()); %>                        	
+                            <%
+                    		if(pdr[i].getDailyrecycle_type()==null){
+                    			
+                    		}else{
+                    			out.print(pdr[i].getDailyrecycle_type());
+                    		} %>                      	
                         </td>
                            <td width="10%">
-                            <%if(pdr[i].getDailyrecycle_status().equals("0")){
+                            <%if(pdr[i].getDailyrecycle_status()!=null&&pdr[i].getDailyrecycle_status().equals("0")){
                         	%>
                         	<a href="javascript:confirm(<%=pdr[i].getDailyrecycle_id()%>);" target="_blank">订单未完成</a>
                         	<%

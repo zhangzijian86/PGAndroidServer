@@ -64,13 +64,28 @@ pu = om.getUsers();
                         	<input type="radio" id="phone" name = "phonenumber" value="<%=pu[i].getUser_mobile()%>">
                         </td>
                     	<td width="8%">
-                        	<%out.print(pu[i].getUser_name()); %>
+                    	    <%
+                    		if(pu[i].getUser_name()==null){
+                    			
+                    		}else{
+                    			out.print(pu[i].getUser_name());
+                    		} %>  
                         </td>
                         <td width="10%">
-                        	<%out.print(pu[i].getUser_mobile()); %>
+                           <%
+                    		if(pu[i].getUser_mobile()==null){
+                    			
+                    		}else{
+                    			out.print(pu[i].getUser_mobile());
+                    		} %>                          
                         </td >
                         <td width="12%">
-                        	<%out.print(pu[i].getUser_address()); %>
+                            <%
+                    		if(pu[i].getUser_address()==null){
+                    			
+                    		}else{
+                    			out.print(pu[i].getUser_address());
+                    		} %>   
                         </td>  
                     </tr>
                     <%}

@@ -25,6 +25,33 @@ public class OrderManager {
 	private static final String masterSecret = "3984c07df41e404e579c81f6"; 
 	JPushClient jpushClient = new JPushClient(masterSecret, appKey);
 	
+	public Pgdr_price getOnePrice(String id) 
+	{
+		GetConn getConn=new GetConn();
+		ResultSet rs = null;
+		Connection conn=getConn.getConnection();
+		Pgdr_price pp = null;
+		try {
+			PreparedStatement ps=conn.prepareStatement("select PRICE_ID,PRICE_NAME,PRICE_ISVALID,"
+					+ "PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN "
+					+ "from PGDR_PRICE where PRICE_ID = ? and PRICE_ISVALID = 1");
+			ps.setString(1,id);
+			rs=ps.executeQuery();
+			if(rs!=null){    					
+	    		rs.next();
+	    		pp = new Pgdr_price();
+	    		pp.setPrice_name(rs.getString("PRICE_NAME"));
+	    		pp.setPrice_isvalid(rs.getString("PRICE_ISVALID"));
+	    		pp.setPrice_type(rs.getString("PRICE_TYPE"));
+	    		pp.setPrice_price(rs.getString("PRICE_PRICE"));
+	    		pp.setPrice_explain(rs.getString("PRICE_EXPLAIN"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return pp;
+	}
+	
 	public Pgdr_user getOneUser(String id) 
 	{
 		GetConn getConn=new GetConn();
@@ -58,6 +85,7 @@ public class OrderManager {
 		return puser;
 	}
 	
+	
 	public int updateOneUser(Pgdr_user pu)
 	{
 		GetConn getConn=new GetConn();
@@ -78,6 +106,32 @@ public class OrderManager {
 			ps.setString(4,pu.getUser_address());	
 			ps.setString(5,pu.getUser_id());
 			System.out.println("=updateOneUser=sql="+ps.toString());
+			i=ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		getConn.closeconn(conn);
+		return i;		
+	}
+	
+	public int updateOnePrice(Pgdr_price pp)
+	{
+		GetConn getConn=new GetConn();
+		int i = 0;
+		Connection conn=getConn.getConnection();
+		try {
+			PreparedStatement ps=conn.prepareStatement("update PGDR_PRICE "
+													+ "set PRICE_NAME = ?, "
+													+ "PRICE_PRICE = ?, "
+													+ "PRICE_EXPLAIN = ? "
+													+ "where PRICE_ID = ? "
+													);
+			
+			ps.setString(1,pp.getPrice_name());	
+			ps.setString(2,pp.getPrice_price());	
+			ps.setString(3,pp.getPrice_explain());	
+			ps.setString(4,pp.getPrice_id());	
+			System.out.println("=updateOnePrice=sql="+ps.toString());
 			i=ps.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

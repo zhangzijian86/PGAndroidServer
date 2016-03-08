@@ -15,11 +15,21 @@ String user_address = "";
 String user_email = "";
 String user_type = "";
 if(pu!=null){
-	user_name = pu.getUser_name();
-	user_mobile = pu.getUser_mobile();
-	user_email = pu.getUser_email();
-	user_type = pu.getUser_type();
-	user_address = pu.getUser_address();
+	if(pu.getUser_name()!=null){
+		user_name = pu.getUser_name();
+	}
+	if(pu.getUser_mobile()!=null){
+		user_mobile = pu.getUser_mobile();
+	}
+	if(pu.getUser_email()!=null){
+		user_email = pu.getUser_email();
+	}
+	if(pu.getUser_type()!=null){
+		user_type = pu.getUser_type();
+	}
+	if(pu.getUser_address()!=null){
+		user_address = pu.getUser_address();
+	}
 }
 %>
 <html>

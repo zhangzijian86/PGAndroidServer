@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@ page import="com.pg.bean.Pgdr_user"  %>
+<%@ page import="com.pg.bean.Pgdr_price"  %>
 <%@ page import="com.pg.web.OrderManager"  %>
 
 <%
@@ -8,18 +8,28 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 String id= new String(request.getParameter("id").getBytes("ISO-8859-1"),"utf-8");
 OrderManager om = new OrderManager();
-Pgdr_user  pu = om.getOneUser(id);
-String user_name = "";
-String user_mobile = "";
-String user_address = "";
-String user_email = "";
-String user_type = "";
-if(pu!=null){
-	user_name = pu.getUser_name();
-	user_mobile = pu.getUser_mobile();
-	user_email = pu.getUser_email();
-	user_type = pu.getUser_type();
-	user_address = pu.getUser_address();
+Pgdr_price  pp = om.getOnePrice(id);
+String price_name = "";
+String price_isvalid = "";
+String price_type = "";
+String price_price = "";
+String price_explain = "";
+if(pp!=null){
+	if(pp.getPrice_name()!=null){
+		price_name = pp.getPrice_name();
+	}
+	if(pp.getPrice_isvalid()!=null){
+		price_isvalid = pp.getPrice_isvalid();
+	}
+	if(pp.getPrice_type()!=null){
+		price_type = pp.getPrice_type();
+	}
+	if(pp.getPrice_price()!=null){
+		price_price = pp.getPrice_price();
+	}
+	if(pp.getPrice_explain()!=null){
+		price_explain = pp.getPrice_explain();
+	}
 }
 %>
 <html>
@@ -49,69 +59,67 @@ if(pu!=null){
                 <tbody>
                     <tr>
                         <td>
-                        	<label class="control-label" for="inputEmail">姓名</label>
+                        	<label class="control-label" for="inputEmail">名称</label>
 							<div class="controls">
-								<input class="input-xxlarge" type="text" id="xingming" size="10"  placeholder="姓名"  value =<%=user_name %> >
+								<input class="input-xxlarge" type="text" id="mingcheng" size="10"  placeholder="名称"  value =<%=price_name%> >
 							</div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                        	<label class="control-label" for="inputEmail">手机号</label>
+                        	<label class="control-label" for="inputEmail">类型</label>
 							<div class="controls">
-								<input class="input-xxlarge" type="text" id="shoujihao" size="10"  placeholder="手机号" value =<%=user_mobile %> >
+							<%
+								if (price_type.equals("shouji")) {
+							%>
+						   <input class="input-xxlarge" type="text" id="shoujihao" size="10" readonly placeholder="类型" value ="手机回收" >							
+							<%
+								} else if (price_type.equals("jiuyifu")) {
+							%>
+							<input class="input-xxlarge" type="text" id="shoujihao" size="10" readonly placeholder="类型" value ="衣服回收" >		
+							<%
+								} else if (price_type.equals("suliaoping")) {
+							%>
+							<input class="input-xxlarge" type="text" id="shoujihao" size="10" readonly placeholder="类型" value ="塑料瓶回收" >
+							<%
+								} else if (price_type.equals("yilaguan")) {
+							%>
+							<input class="input-xxlarge" type="text" id="shoujihao" size="10" readonly placeholder="类型" value ="易拉罐回收" >
+							<%
+								} else if (price_type.equals("zhi")) {
+							%>
+							<input class="input-xxlarge" type="text" id="shoujihao" size="10" readonly placeholder="类型" value ="纸箱回收" >
+							<%
+								} else if (price_type.equals("dianzi")) {
+							%>
+							<input class="input-xxlarge" type="text" id="shoujihao" size="10" readonly placeholder="类型" value ="电子设备回收" >
+							<%
+								} else if (price_type.equals("jiadian")) {
+							%>
+							<input class="input-xxlarge" type="text" id="shoujihao" size="10" readonly placeholder="类型" value ="家电回收" >
+							<%
+								} else if (price_type.equals("qita")) {
+							%>
+							<input class="input-xxlarge" type="text" id="shoujihao" size="10" readonly placeholder="类型" value ="其他回收" >
+							<%
+								}
+							%>							
 							</div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                        	<label class="control-label" for="inputEmail">电子邮箱</label>
+                        	<label class="control-label" for="inputEmail">价格</label>
 							<div class="controls">
-								<input class="input-xxlarge" type="text" id="dianziyouxiang" size="10"  placeholder="电子邮箱"  value ="<%=user_email %>" >
+								<input class="input-xxlarge" type="text" id="jiage" size="10"  placeholder="价格"  value ="<%=price_price %>" >
 							</div>
                         </td>
-                    </tr>                
-                                            <%
-                        if(user_type.equals("0")){
-		                    %>
-                        	<tr>
-	                        <td>
-	                        	<label class="control-label" for="inputEmail">用户类型</label>
-								<div class="controls">
-									<input class="input-xxlarge" type="text" id="huishouriqi" readonly size="10" value ="普通用户" >
-								</div>
-	                        </td>
-                    		</tr>  
-                        	<%
-							}else if(user_type.equals("1")){
-			                %>
-                        	<tr>
-	                        <td>
-	                        	<label class="control-label" for="inputEmail">用户类型</label>
-								<div class="controls">
-									<input class="input-xxlarge" type="text" id="huishouriqi" readonly size="10" value ="在申请状态用户" >
-								</div>
-	                        </td>
-                    		</tr>                         		
-                        	<%
-							}else{
-			                %>
-			                <tr>
-	                        <td>
-	                        	<label class="control-label" for="inputEmail">用户类型</label>
-								<div class="controls">
-									<input class="input-xxlarge" type="text" id="huishouriqi" readonly size="10" value ="小贩" >
-								</div>
-	                        </td>
-                    		</tr>   
-			                <%
-							}
-			                %>
+                    </tr>   
                      <tr>                    
                     		<td>
-                      		<label class="control-label" for="inputEmail">地址</label>
+                      		<label class="control-label" for="inputEmail">说明</label>
                             <div class="controls">
-                                <textarea class="input-xxlarge" id="dizhi"  rows="3" placeholder="地址"  ><%=user_address%></textarea>
+                                <textarea class="input-xxlarge" id="shuoming"  rows="3" placeholder="说明"  ><%=price_explain%></textarea>
                             </div>
                         	</td>
                      </tr>                
@@ -132,15 +140,13 @@ if(pu!=null){
 <script type="text/javascript">
 	function confirm()
 	{
-		var xingming = document.getElementById("xingming");
-		var shoujihao = document.getElementById("shoujihao");
-		var dianziyouxiang =  document.getElementById("dianziyouxiang");
-		var dizhi =  document.getElementById("dizhi");
+		var mingcheng = document.getElementById("mingcheng");
+		var jiage = document.getElementById("jiage");
+		var shuoming =  document.getElementById("shuoming");
 	    $.ajax({
 	        type: "Post",
-	        url: "jpushModifyUserResult.jsp?id="+<%=id%>+"&xingming="+xingming.value
-	        		+"&shoujihao="+shoujihao.value+"&dianziyouxiang="+dianziyouxiang.value
-	        		+"&dizhi="+dizhi.value,
+	        url: "jpushModifyPriceResult.jsp?id="+<%=id%>+"&mingcheng="+mingcheng.value
+	        		+"&jiage="+jiage.value+"&shuoming="+shuoming.value,
 	        dataType: "html",
 	        data: {
 	            //organiseUnitID: selorganiseUnitID,
@@ -151,11 +157,11 @@ if(pu!=null){
 	        		window.opener.location.href = window.opener.location.href;
 	        		window.close();  
 	        	}else{
-	        		alert("修改人员信息失败");
+	        		alert("修改价格失败");
 	        	}
 	        },
 	       error: function( msg ) { 
-	    	   alert("修改人员信息失败"); 
+	    	   alert("修改价格失败"); 
 	        }
 		});		
 	}

@@ -21,18 +21,39 @@ String dailyrecycle_type = "";
 String dailyrecycle_explain = "";
 String dailyrecycle_address = "";
 if(pdr!=null){
-	dailyrecycle_name = pdr.getDailyrecycle_name();
-	dailyrecycle_user_mobile = pdr.getDailyrecycle_user_mobile();
-	dailyrecycle_date = pdr.getDailyrecycle_date();
-	dailyrecycle_iscycle = pdr.getDailyrecycle_iscycle();
-	dailyrecycle_cycletype = pdr.getDailyrecycle_cycletype();
-	dailyrecycle_status  = pdr.getDailyrecycle_status();
-	dailyrecycle_recyclingmanphone = pdr.getDailyrecycle_recyclingmanphone();
-	dailyrecycle_finishtime = pdr.getDailyrecycle_finishtime();
-	dailyrecycle_type = pdr.getDailyrecycle_type();
-	dailyrecycle_explain = pdr.getDailyrecycle_explain();
-	dailyrecycle_address = pdr.getDailyrecycle_address();
-	dailyrecycle_recyclingmanphone = pdr.getDailyrecycle_recyclingmanphone();
+	if(pdr.getDailyrecycle_name()!=null){
+		dailyrecycle_name = pdr.getDailyrecycle_name();
+	}
+	if(pdr.getDailyrecycle_user_mobile()!=null){
+		dailyrecycle_user_mobile = pdr.getDailyrecycle_user_mobile();
+	}
+	if(pdr.getDailyrecycle_date()!=null){
+		dailyrecycle_date = pdr.getDailyrecycle_date();
+	}
+	if(pdr.getDailyrecycle_iscycle()!=null){
+		dailyrecycle_iscycle = pdr.getDailyrecycle_iscycle();
+	}
+	if(pdr.getDailyrecycle_cycletype()!=null){
+		dailyrecycle_cycletype = pdr.getDailyrecycle_cycletype();
+	}
+	if(pdr.getDailyrecycle_status()!=null){
+		dailyrecycle_status = pdr.getDailyrecycle_status();
+	}
+	if(pdr.getDailyrecycle_recyclingmanphone()!=null){
+		dailyrecycle_recyclingmanphone = pdr.getDailyrecycle_recyclingmanphone();
+	}
+	if(pdr.getDailyrecycle_finishtime()!=null){
+		dailyrecycle_finishtime = pdr.getDailyrecycle_finishtime();
+	}
+	if(pdr.getDailyrecycle_type()!=null){
+		dailyrecycle_type = pdr.getDailyrecycle_type();
+	}
+	if(pdr.getDailyrecycle_explain()!=null){
+		dailyrecycle_explain = pdr.getDailyrecycle_explain();
+	}
+	if(pdr.getDailyrecycle_address()!=null){
+		dailyrecycle_address = pdr.getDailyrecycle_address();
+	}
 }
 %>
 <html>
