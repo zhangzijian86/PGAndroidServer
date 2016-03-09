@@ -201,7 +201,7 @@ public class OrderManager {
 		return i;		
 	}
 	
-	public Pgdr_user[] getUsers() 
+	public Pgdr_user[] getUsers(String currentPage,String eachPage) 
 	{
 		int rows;
 		GetConn getConn=new GetConn();
@@ -211,7 +211,15 @@ public class OrderManager {
 		try {
 			PreparedStatement ps=conn.prepareStatement("select USER_ID,USER_MOBILE,USER_NAME,USER_PASSWORD"
 					+ ",USER_ADDRESS,USER_EMAIL,USER_STATUS,USER_TYPE,USER_PHOTO"
-					+ " from PGDR_USER where USER_TYPE = '2'");
+					+ " from PGDR_USER where USER_TYPE = '2' limit ?, ?");
+			int intcurrentPage = Integer.parseInt(currentPage);
+			int inteachPage = Integer.parseInt(eachPage);
+			if(currentPage.equals("0")){
+				ps.setInt(1, 0);
+			}else{
+				ps.setInt(1, (intcurrentPage-1)*inteachPage);
+			}
+			ps.setInt(2, inteachPage);
 			rs=ps.executeQuery();
 			if(rs!=null){    		
 	    		rs.last();
@@ -240,7 +248,7 @@ public class OrderManager {
 		return pusers;
 	}
 	
-	public Pgdr_price[] getPrices() 
+	public Pgdr_price[] getPrices(String currentPage,String eachPage) 
 	{
 		int rows;
 		GetConn getConn=new GetConn();
@@ -253,7 +261,15 @@ public class OrderManager {
 					+ "PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN " 
 					+ "from PGDR_PRICE "
 					+ "where PRICE_ISVALID=1 "
-					+ "order by PRICE_ISVALID desc");
+					+ "order by PRICE_ISVALID desc  limit ?, ?");
+			int intcurrentPage = Integer.parseInt(currentPage);
+			int inteachPage = Integer.parseInt(eachPage);
+			if(currentPage.equals("0")){
+				ps.setInt(1, 0);
+			}else{
+				ps.setInt(1, (intcurrentPage-1)*inteachPage);
+			}
+			ps.setInt(2, inteachPage);
 			rs=ps.executeQuery();
 			if(rs!=null){    		
 	    		rs.last();
@@ -278,7 +294,7 @@ public class OrderManager {
 		return pps;
 	}	
 	
-	public Pgdr_user[] getApplyUsers() 
+	public Pgdr_user[] getApplyUsers(String currentPage,String eachPage) 
 	{
 		int rows;
 		GetConn getConn=new GetConn();
@@ -288,7 +304,15 @@ public class OrderManager {
 		try {
 			PreparedStatement ps=conn.prepareStatement("select USER_ID,USER_MOBILE,USER_NAME,USER_PASSWORD"
 					+ ",USER_ADDRESS,USER_EMAIL,USER_STATUS,USER_TYPE,USER_PHOTO"
-					+ " from PGDR_USER order by USER_TYPE desc");
+					+ " from PGDR_USER order by USER_TYPE desc  limit ?, ?");
+			int intcurrentPage = Integer.parseInt(currentPage);
+			int inteachPage = Integer.parseInt(eachPage);
+			if(currentPage.equals("0")){
+				ps.setInt(1, 0);
+			}else{
+				ps.setInt(1, (intcurrentPage-1)*inteachPage);
+			}
+			ps.setInt(2, inteachPage);
 			rs=ps.executeQuery();
 			if(rs!=null){    		
 	    		rs.last();

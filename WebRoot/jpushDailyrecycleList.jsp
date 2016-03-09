@@ -187,7 +187,6 @@ pageCount =  (new Double(Math.ceil(((double)count/Double.valueOf(eachPage))))).i
                         <td colspan="2" >
 
                         </td> 
-
                     </tr>
                 </tbody>
             </table>

@@ -5,9 +5,21 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+String currentPage = "0";
+if(request.getParameter("currentPage")!=null){
+	currentPage = new String(request.getParameter("currentPage").getBytes("ISO-8859-1"),"utf-8");
+}
+String eachPage = "10";
+if(request.getParameter("eachPage")!=null){
+	eachPage = new String(request.getParameter("eachPage").getBytes("ISO-8859-1"),"utf-8");
+}
+int pageCount = 0;
+int count = 0;
 Pgdr_user [] pu = null;
 OrderManager om = new OrderManager();
-pu = om.getApplyUsers();
+pu = om.getApplyUsers(currentPage,eachPage);
+count = om.getCount("PGDR_USER","");
+pageCount =  (new Double(Math.ceil(((double)count/Double.valueOf(eachPage))))).intValue();
 %>
 <html>
 <head>
@@ -97,17 +109,41 @@ pu = om.getApplyUsers();
                     </tr>
                     <%}
 					}%>
+					<tr class="warning">
+                        <td colspan="2" >
+
+                        </td >
+                        <td colspan="4" align="center">
+                        <a href="javascript:paging(1);" target="_blank">首页</a>
+                        		<%
+                        		for(int j = 1; j<pageCount+1 ; j++){ 
+                        		%>
+                        		<a href="javascript:paging(<%=j%>);" target="_blank"><%=j%></a>
+                        		<%
+                        		}
+                        		%>
+						<a href="javascript:paging(<%=pageCount%>);" target="_blank">末页</a>
+                        </td>
+                        <td colspan="2" >
+
+                        </td> 
+
+                    </tr>
                 </tbody>
             </table>
         </form>
     </body>
 <script type="text/javascript" src="js/jquery-1.4.1.js"></script>
 <script type="text/javascript">
-	function confirm(phonenumber)
-	{
+
+	function paging(currentPage) {
+		window.location.href = "jpushUserList.jsp?currentPage="
+				+ currentPage + "&eachPage=10";
+	}
+	function confirm(phonenumber) {
 		$.ajax({
 			type : "Post",
-			url : "jpushUserListResult.jsp?phonenumber="+ phonenumber,
+			url : "jpushUserListResult.jsp?phonenumber=" + phonenumber,
 			dataType : "html",
 			data : {
 			//organiseUnitID: selorganiseUnitID,
@@ -125,9 +161,10 @@ pu = om.getApplyUsers();
 			}
 		});
 	}
-	function modify(id)
-	{
-		window.open ("jpushModifyUser.jsp?id="+id, "", "height=700, width=800"); 
+	function modify(id) {
+		window
+				.open("jpushModifyUser.jsp?id=" + id, "",
+						"height=700, width=800");
 	}
 </script>
 </html>
