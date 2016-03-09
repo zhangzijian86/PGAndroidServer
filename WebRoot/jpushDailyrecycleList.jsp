@@ -5,9 +5,21 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+String currentPage = "0";
+if(request.getParameter("currentPage")!=null){
+	currentPage = new String(request.getParameter("currentPage").getBytes("ISO-8859-1"),"utf-8");
+}
+String eachPage = "10";
+if(request.getParameter("eachPage")!=null){
+	eachPage = new String(request.getParameter("eachPage").getBytes("ISO-8859-1"),"utf-8");
+}
+int pageCount = 0;
+int count = 0;
 Ppdr_dailyrecycle[] pdr = null;
 OrderManager udi = new OrderManager();
-pdr = udi.getRecycle();
+count = udi.getCount("PGDR_DAILYRECYCLE","where DAILYRECYCLE_ISVALID = 1");
+pdr = udi.getRecycle(currentPage,eachPage);
+pageCount =  (new Double(Math.ceil(((double)count/Double.valueOf(eachPage))))).intValue();
 %>
 <html>
 <head>
@@ -157,18 +169,41 @@ pdr = udi.getRecycle();
                     </tr>
                     <%}
 					}%>
+					<tr class="warning">
+                        <td colspan="2" >
+
+                        </td >
+                        <td colspan="4" align="center">
+                        <a href="javascript:paging(1);" target="_blank">首页</a>
+                        		<%
+                        		for(int j = 1; j<pageCount+1 ; j++){ 
+                        		%>
+                        		<a href="javascript:paging(<%=j%>);" target="_blank"><%=j%></a>
+                        		<%
+                        		}
+                        		%>
+						<a href="javascript:paging(<%=pageCount%>);" target="_blank">末页</a>
+                        </td>
+                        <td colspan="2" >
+
+                        </td> 
+
+                    </tr>
                 </tbody>
             </table>
         </form>
     </body>
 <script type="text/javascript">
-	function confirm(id)
-	{
-		window.open ("jpushDailyrecycleManList.jsp?id="+id, "", "height=700, width=800"); 
+	function paging(currentPage) {
+		window.location.href = "jpushDailyrecycleList.jsp?currentPage="+currentPage+"&eachPage=10";
 	}
-	function modify(id)
-	{
-		window.open ("jpushModifyDailyrecycle.jsp?id="+id, "", "height=700, width=800"); 
+	function confirm(id) {
+		window.open("jpushDailyrecycleManList.jsp?id=" + id, "",
+				"height=700, width=800");
+	}
+	function modify(id) {
+		window.open("jpushModifyDailyrecycle.jsp?id=" + id, "",
+				"height=700, width=800");
 	}
 </script>
 </html>

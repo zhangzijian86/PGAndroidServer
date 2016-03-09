@@ -23,7 +23,27 @@ public class OrderManager {
 	
 	private static final String appKey = "a21bcb87918d9c6c5f28d05a";   //7004f4cfd9fbb5ff19cc1a7d    cai 934ee5200b34ec97d469a7f1
 	private static final String masterSecret = "3984c07df41e404e579c81f6"; 
-	JPushClient jpushClient = new JPushClient(masterSecret, appKey);
+	JPushClient jpushClient = new JPushClient(masterSecret, appKey);	
+	
+    //查询所总条数   
+    public int getCount(String name,String Condition){   
+    	String sql="select count(*) as pageCount from "+name+" "+Condition;   
+    	int i=0;   
+    	GetConn getConn=new GetConn();
+    	ResultSet rs = null;
+    	Connection conn=getConn.getConnection();
+    	try {
+    		PreparedStatement ps=conn.prepareStatement(sql);
+    		rs=ps.executeQuery();
+    		if(rs!=null){    					
+    			rs.next();  
+    			i=rs.getInt("pageCount");  
+    		}
+    	} catch (SQLException e) {   
+    		e.printStackTrace();   
+    	}   
+    	return i;   
+    }  
 	
 	public Pgdr_price getOnePrice(String id) 
 	{
@@ -358,7 +378,7 @@ public class OrderManager {
 	}
 	
 	
-	public Ppdr_dailyrecycle[] getRecycle() 
+	public Ppdr_dailyrecycle[] getRecycle(String currentPage,String eachPage) 
 	{
 		GetConn getConn=new GetConn();
 		Ppdr_dailyrecycle[] pdr = null;
@@ -375,8 +395,16 @@ public class OrderManager {
 					+ "DAILYRECYCLE_ADDRESS,DAILYRECYCLE_NAME "
 					+ "from PGDR_DAILYRECYCLE where "
 					+ "DAILYRECYCLE_ISVALID = 1 "
-					+ "order by DAILYRECYCLE_STATUS "
+					+ "order by DAILYRECYCLE_STATUS  limit ?, ?"
 					);
+			int intcurrentPage = Integer.parseInt(currentPage);
+			int inteachPage = Integer.parseInt(eachPage);
+			if(currentPage.equals("0")){
+				ps.setInt(1, 0);
+			}else{
+				ps.setInt(1, (intcurrentPage-1)*inteachPage);
+			}
+			ps.setInt(2, inteachPage);
 			System.out.println("=getRecycle=sql="+ps.toString());
 			rs=ps.executeQuery();
 			if(rs!=null){    		
