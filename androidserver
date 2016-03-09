@@ -61,6 +61,37 @@ CREATE TABLE 'PGDR_DAILYRECYCLE'(
 'DAILYRECYCLE_RECYCLINGMANPHONE' Varchar(50),--回收人手机
 'DAILYRECYCLE_FINISHTIME' Varchar(50)--回收时间
 )
+价格表
+CREATE TABLE PGDR_PRICE(
+PRICE_ID int(50) NOT NULL auto_increment,
+PRICE_NAME Varchar(50) ,
+PRICE_ISVALID int(50),-- 是否是有效 1 有效 0 无效
+PRICE_TYPE Varchar(50) , -- 类型  手机 易拉罐等
+PRICE_PRICE Varchar(50) , -- 价格 元/斤 分/个 元/部
+PRICE_EXPLAIN Varchar(50) , -- 说明
+PRIMARY KEY (PRICE_ID)
+)
+insert into PGDR_PRICE (PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN) 
+	       values ('111','1','shouji','1元/个','');
+insert into PGDR_PRICE (PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN) 
+	       values ('222','1','shouji','2元/个','');
+insert into PGDR_PRICE (PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN) 
+	       values ('333','1','shouji','3元/个','');
+insert into PGDR_PRICE (PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN) 
+	       values ('444','1','shouji','4元/个','');
+insert into PGDR_PRICE (PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN) 
+	       values ('555','1','shouji','5元/个','');
+
+insert into PGDR_PRICE (PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN) 
+	       values ('Y111','1','jiuyifu','1元/件','');
+insert into PGDR_PRICE (PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN) 
+	       values ('Y222','1','jiuyifu','2元/件','');
+insert into PGDR_PRICE (PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN) 
+	       values ('Y333','1','jiuyifu','3元/件','');
+insert into PGDR_PRICE (PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN) 
+	       values ('Y444','1','jiuyifu','4元/件','');
+insert into PGDR_PRICE (PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN) 
+	       values ('Y555','1','jiuyifu','5元/件','');
 ============================================================
 http://dev.mysql.com/downloads/mysql/
 http://blog.163.com/ji_1006/blog/static/106123412015104103948782/
