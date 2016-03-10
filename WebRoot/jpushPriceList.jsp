@@ -140,10 +140,10 @@ pageCount =  (new Double(Math.ceil(((double)count/Double.valueOf(eachPage))))).i
                     <%}
 					}%>
 					<tr class="warning">
-                        <td colspan="2" >
+                        <td colspan="1" >
 
                         </td >
-                        <td colspan="4" align="center">
+                        <td colspan="3" align="center">
                         <a href="javascript:paging(1);" target="_blank">首页</a>
                         		<%
                         		for(int j = 1; j<pageCount+1 ; j++){ 
@@ -154,7 +154,7 @@ pageCount =  (new Double(Math.ceil(((double)count/Double.valueOf(eachPage))))).i
                         		%>
 						<a href="javascript:paging(<%=pageCount%>);" target="_blank">末页</a>
                         </td>
-                        <td colspan="2" >
+                        <td colspan="1" >
 
                         </td> 
                     </tr>
