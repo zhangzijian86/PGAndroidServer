@@ -160,6 +160,31 @@ public class OrderManager {
 		return i;		
 	}
 	
+	public int addOnePrice(Pgdr_price pp)
+	{
+		GetConn getConn=new GetConn();
+		int i = 0;
+		Connection conn=getConn.getConnection();
+		try {
+			PreparedStatement ps=conn.prepareStatement(""
+					+ "insert into PGDR_PRICE "
+					+ "("
+					+ "PRICE_NAME,PRICE_ISVALID,PRICE_TYPE,PRICE_PRICE,PRICE_EXPLAIN"
+					+ ")values(?,'1',?,?,?);"
+					);			
+			ps.setString(1,pp.getPrice_name());	
+			ps.setString(2,pp.getPrice_type());
+			ps.setString(3,pp.getPrice_price());			
+			ps.setString(4,pp.getPrice_explain());					
+			System.out.println("=addOnePrice=sql="+ps.toString());
+			i=ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		getConn.closeconn(conn);
+		return i;		
+	}
+	
 	public int updateUser(String id,String photonumber)
 	{
 		PushPayload payload  = null;

@@ -39,8 +39,9 @@ pageCount =  (new Double(Math.ceil(((double)count/Double.valueOf(eachPage))))).i
         	<table class="table table-hover table-bordered">
             	<thead>
                 	<tr>
-                        <th colspan="4"><h3>价格列表</h3></th>  
-                        <th><h3><a href="javascript:history.go(-1)">返回</a></h3></th>                                               
+                        <th colspan="3"><h3>价格列表</h3></th>  
+                        <th><h3><a href="javascript:add();">新建价格</a></h3></th>     
+                        <th><h3><a href="javascript:history.go(-1)">返回</a></h3></th>                                                                      
                     </tr>
                 </thead>
                 <tbody>
@@ -192,6 +193,10 @@ pageCount =  (new Double(Math.ceil(((double)count/Double.valueOf(eachPage))))).i
 	}
 	function modify(id) {
 		window.open("jpushModifyPrice.jsp?id=" + id, "",
+				"height=700, width=800");
+	}
+	function add() {
+		window.open("jpushNewPrice.jsp", "",
 				"height=700, width=800");
 	}
 </script>
