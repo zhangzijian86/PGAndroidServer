@@ -1,5 +1,6 @@
 package com.pg.web;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -560,6 +561,31 @@ public class OrderManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
+		getConn.closeconn(conn);
+		return i;		
+	}
+	public int addAkeyRecycle(String shouji)
+	{
+		System.out.println("====addAkeyRecycle=============00======");
+		GetConn getConn=new GetConn();
+		int i = 0;
+		Connection conn=getConn.getConnection();
+		try {
+			PreparedStatement ps=conn.prepareStatement("insert into PGDR_DAILYRECYCLE("
+			+ "DAILYRECYCLE_USER_MOBILE,DAILYRECYCLE_ISVALID,DAILYRECYCLE_STATUS"
+			+ ")values("
+			+ "?,1,0)"
+			);			
+			if(shouji!=null){
+				ps.setString(1,shouji.trim());
+			}else{
+				ps.setString(1,null);
+			}
+			System.out.println("====addRecycle==========1=======sql=="+ps.toString());
+			i=ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		getConn.closeconn(conn);
 		return i;		
 	}
