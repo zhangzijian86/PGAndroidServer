@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;  
 import java.io.IOException;  
 import java.net.URL;  
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;  
+import java.util.Date;
 import java.util.Iterator;  
 import java.util.List;  
   
+
+
 import javax.servlet.ServletException;  
 import javax.servlet.ServletOutputStream;  
 import javax.servlet.http.HttpServlet;  
@@ -15,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;  
   
   
+
+
 import org.apache.commons.fileupload.FileItem;  
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;  
 import org.apache.commons.fileupload.servlet.ServletFileUpload;  
@@ -36,44 +42,57 @@ public class FileUpload extends HttpServlet {
             HttpServletResponse response) throws ServletException, IOException {  
       
         String aFileName = request.getParameter("fileName");   
-        String online = request.getParameter("online");  
-        FileInputStream in = null;   
-        ServletOutputStream out = null;   
-        boolean isOnLine = online != null ? true : false ;  
-        try {  
-          
-              
-            if(isOnLine){   
-                URL u = new URL("file:///"+fileDir + aFileName);  
-                response.setContentType(u.openConnection().getContentType());  
-                response.setHeader("Content-Disposition", "inline; filename="+aFileName);     
-             }  
-            else{   
-                response.setContentType("application/x-msdownload");   
-                response.setHeader("Content-Disposition", "attachment; filename=" + aFileName);   
-            }  
-          
-            in = new FileInputStream(fileDir + aFileName);   
-            out = response.getOutputStream();  
-            out.flush();  
-            int aRead = 0;  
-            while ((aRead = in.read()) != -1 & in != null) {  
-                out.write(aRead);  
-             }  
-            out.flush();  
-              
-        } catch (Throwable e) {  
-            e.printStackTrace();  
-        } finally {  
-            try {  
-                in.close();  
-                out.close();  
-            } catch (Throwable e) {  
-                e.printStackTrace();  
-            }  
-        }  
+        request.setAttribute("fileName",aFileName);  
+        request.setAttribute("type","1");  
+        request.getRequestDispatcher("uploadFileResult.jsp").forward(request, response);  
   
     }  
+    
+//    protected void doGet(HttpServletRequest request,  
+//            HttpServletResponse response) throws ServletException, IOException {  
+//      
+//    	Date nowTime=new Date(); 
+//    	SimpleDateFormat time=new SimpleDateFormat("yyyy:MM:dd-HH:mm:ss"); 
+//        String aFileName = request.getParameter("fileName");   
+//        aFileName = aFileName + "-" + time.format(nowTime).toString();
+//        String online = request.getParameter("online");  
+//        FileInputStream in = null;   
+//        ServletOutputStream out = null;   
+//        boolean isOnLine = online != null ? true : false ;  
+//        try {  
+//          
+//              
+//            if(isOnLine){   
+//                URL u = new URL("file:///"+fileDir + aFileName);  
+//                response.setContentType(u.openConnection().getContentType());  
+//                response.setHeader("Content-Disposition", "inline; filename="+aFileName);     
+//             }  
+//            else{   
+//                response.setContentType("application/x-msdownload");   
+//                response.setHeader("Content-Disposition", "attachment; filename=" + aFileName);   
+//            }  
+//          
+//            in = new FileInputStream(fileDir + aFileName);   
+//            out = response.getOutputStream();  
+//            out.flush();  
+//            int aRead = 0;  
+//            while ((aRead = in.read()) != -1 & in != null) {  
+//                out.write(aRead);  
+//             }  
+//            out.flush();  
+//              
+//        } catch (Throwable e) {  
+//            e.printStackTrace();  
+//        } finally {  
+//            try {  
+//                in.close();  
+//                out.close();  
+//            } catch (Throwable e) {  
+//                e.printStackTrace();  
+//            }  
+//        }  
+//  
+//    }  
   
     protected void doPost(HttpServletRequest request,  
             HttpServletResponse response) throws ServletException, IOException {  
@@ -85,6 +104,7 @@ public class FileUpload extends HttpServlet {
             String uploader = null;  
             String date = null;  
             List<String> fileNames = new ArrayList<String>();  
+            List<String> fileNamesNew = new ArrayList<String>();  
             while (iter.hasNext()) {  
                 FileItem item = (FileItem) iter.next();  
                 if (!item.isFormField()) { // 文件  
@@ -96,7 +116,12 @@ public class FileUpload extends HttpServlet {
                     else  
                         newFileName = oldFileName;  
                     fileNames.add(newFileName);  
+                	Date nowTime=new Date(); 
+                	SimpleDateFormat time=new SimpleDateFormat("yyyy:MM:dd-HH:mm:ss"); 
+                	newFileName = newFileName.substring(0, newFileName.lastIndexOf(".")) + "-" + 
+                										time.format(nowTime).toString()+newFileName.substring(newFileName.lastIndexOf("."),newFileName.length());
                     item.write(new File(fileDir + newFileName));  
+                    fileNamesNew.add(newFileName);
                 } else { // 表单  
                     String fieldName = item.getFieldName();  
                     if ("uploader".equals(fieldName)) {  
@@ -106,7 +131,8 @@ public class FileUpload extends HttpServlet {
                     }  
                 }  
             }  
-            request.setAttribute("fileNames",fileNames);  
+            request.setAttribute("fileNames",fileNamesNew); 
+            request.setAttribute("type","0");  
             request.getRequestDispatcher("uploadFileResult.jsp").forward(request, response);  
         } catch (Exception e) {  
   

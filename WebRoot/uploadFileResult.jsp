@@ -10,33 +10,29 @@
 <body>  
    
  <br>  
-  --------------直接下载------------  
-     <br>  
-      <%  
+ 
+      <%         
+        String type = (String)request.getAttribute("type");   
+      	if(type.equals("0")){
         List<String> fileNames = (List<String> )request.getAttribute("fileNames");   
         for(String fileName : fileNames) {  
       %>  
-       
+      --------------是否导入------------  
+      <br> 
         <form action="FileUpload" method="get">  
             <input type="hidden" name="fileName" value="<%=fileName %>" />  
-            <input type="submit" value="下载:<%=fileName %>" />  
+            <input type="submit" value="导入文件:<%=fileName %>" />  
         </form>  
+     <br> 
      <%  
-        }  
-     %>  
-     <br>  
-      --------------直接打开---------  
-     <%   
-       for(String fileName : fileNames) {  
+      	}   
+      }else{
+    	  String aFileName = (String)request.getAttribute("aFileName");   
       %>  
-        <form action="FileUpload" method="get">  
-            <input type="hidden" name="fileName" value="<%=fileName %>" />  
-            <input type="hidden" name="online" value="yes" />  
-            <input type="submit" value="打开:<%=fileName %>" />  
-        </form>  
-     <%  
+     	导入成功
+      <%  
         }  
-     %>  
+      %>  
      </br>  
   
 </body>  
