@@ -31,15 +31,15 @@
       --------是否导入----------
       <br> 
         <form action="FileUpload" method="get">  
-        	<input type="text" name="dizhi" size="10"  placeholder="数据库ip地址"  value ="192.8.50.206" >
+        	<input type="text" name="dizhi" size="10"  placeholder="数据库ip地址"  value ="123.56.104.86" >
         	<br> 
-        	<input type="text" name="duankou" size="10"  placeholder="数据库端口"  value ="3306" >
+        	<input type="text" name="duankou" size="10"  placeholder="数据库端口"  value ="33061" >
         	<br> 
-        	<input type="text" name="mingzi" size="10"  placeholder="数据库名字"  value ="sdisplat_bfyk" >
+        	<input type="text" name="mingzi" size="10"  placeholder="数据库名字"  value ="sdisplat_empolder" >
         	<br> 
         	<input type="text" name="zhanghu" size="10"  placeholder="数据库账户"  value ="root" >
         	<br> 
-        	<input type="password" name="mima" size="10"  placeholder="数据库密码"  value ="root" >
+        	<input type="password" name="mima" size="10"  placeholder="数据库密码"  value ="sdisplat!qa@ws" >
         	<br> 
             <input type="hidden" name="fileName" value="<%=fileName %>" />  
             <br> 
