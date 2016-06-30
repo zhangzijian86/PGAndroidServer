@@ -29,6 +29,7 @@
       --------上传完成----------
       <br> 
       --------是否导入----------
+      <!--  
       <br> 
         <form action="FileUpload" method="get">  
         	<input type="text" name="dizhi" size="10"  placeholder="数据库ip地址"  value ="123.56.104.86" >
@@ -40,6 +41,32 @@
         	<input type="text" name="zhanghu" size="10"  placeholder="数据库账户"  value ="root" >
         	<br> 
         	<input type="password" name="mima" size="10"  placeholder="数据库密码"  value ="sdisplat!qa@ws" >
+        	<br> 
+        	<input type="text" name="danwei" size="10"  placeholder="申报单位编码"  value ="100000077" >
+        	<br> 
+        	<input type="text" name="renyuan" size="10"  placeholder="申报人员编码"  value ="aofengadmin" >
+        	<br> 
+            <input type="hidden" name="fileName" value="<%=fileName %>" />  
+            <br> 
+            <input type="submit" value="导入文件:<%=fileName %>" />  
+        </form>  
+     <br> 
+     -->
+     <br> 
+        <form action="FileUpload" method="get">  
+        	<input type="text" name="dizhi" size="10"  placeholder="数据库ip地址"  value ="192.8.50.206" >
+        	<br> 
+        	<input type="text" name="duankou" size="10"  placeholder="数据库端口"  value ="3306" >
+        	<br> 
+        	<input type="text" name="mingzi" size="10"  placeholder="数据库名字"  value ="sdisplat_bfyk" >
+        	<br> 
+        	<input type="text" name="zhanghu" size="10"  placeholder="数据库账户"  value ="root" >
+        	<br> 
+        	<input type="password" name="mima" size="10"  placeholder="数据库密码"  value ="root" >
+        	<br> 
+        	<input type="text" name="danwei" size="10"  placeholder="申报单位编码"  value ="100000077" >
+        	<br> 
+        	<input type="text" name="renyuan" size="10"  placeholder="申报人员编码"  value ="aofengadmin" >
         	<br> 
             <input type="hidden" name="fileName" value="<%=fileName %>" />  
             <br> 

@@ -1,5 +1,6 @@
 package com.pg.web;
 
+import java.io.BufferedInputStream;
 import java.io.File;  
 import java.io.FileInputStream;  
 import java.io.IOException;  
@@ -8,8 +9,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;  
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;  
 import java.util.List;  
@@ -22,7 +25,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;  
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;  
 import org.apache.commons.fileupload.servlet.ServletFileUpload;  
+import org.apache.poi.hssf.usermodel.HSSFDateUtil;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.util.UUID;
+
+import com.pg.bean.Pgdr_user;
 import com.pg.db.GetExcelConn;
   
 /** 
@@ -41,17 +52,23 @@ public class FileUpload extends HttpServlet {
     protected void doGet(HttpServletRequest request,  
             HttpServletResponse response) throws ServletException, IOException {  
       
+    	request.setCharacterEncoding("UTF-8");    	
+    	
+    	String sqlzong = "";
+    	
     	Date nowTime=new Date(); 
     	SimpleDateFormat time=new SimpleDateFormat("yyyyMMddHHmmss");   
     	SimpleDateFormat time1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");   
     	
-        String aFileName = request.getParameter("fileName");   
+    	String aFileName = new String(request.getParameter("fileName").getBytes("iso-8859-1"), "utf-8");   
         
         String dizhi = request.getParameter("dizhi");   
         String duankou = request.getParameter("duankou");
         String mingzi = request.getParameter("mingzi");
         String zhanghu = request.getParameter("zhanghu");
         String mima = request.getParameter("mima");
+        String danwei = request.getParameter("danwei");
+        String renyuan = request.getParameter("renyuan");       
         
         System.out.println("=========aFileName============"+aFileName);
         System.out.println("=========dizhi============"+dizhi);
@@ -59,21 +76,41 @@ public class FileUpload extends HttpServlet {
         System.out.println("=========mingzi============"+mingzi);
         System.out.println("=========zhanghu============"+zhanghu);
         System.out.println("=========mima============"+mima);
+        System.out.println("=========danwei============"+danwei);
+        System.out.println("=========renyuan============"+renyuan);
         
-        
+    	GetExcelConn getExcelConn=new GetExcelConn();
+    	Connection conn=getExcelConn.getConnection(dizhi,duankou,mingzi,zhanghu,mima);        
         
         String id = UUID.randomUUID().toString();        
       
         String FaultCode = "EMF";
         FaultCode = FaultCode+time.format(nowTime).toString()+(int)(Math.random()*100);
         
-        String ReportOrganiseUnit = "10570bed-54ff-11e5-8ec1-64006a4cb35a";//申报单位id(来自于SDMS_OrganiseUnit表OrganiseUnitID) 
+        String ReportOrganiseUnit = "00000000-0000-0000-0000-000000000000";//"10570bed-54ff-11e5-8ec1-64006a4cb35a";//申报单位id(来自于SDMS_OrganiseUnit表OrganiseUnitID) 
         
-        String EquipmentID = "100000416"; //EMB_Equipment 表 equipmentcode 转化为 e7d64b65-b847-11e5-a82b-64006a4cb35a
+		ResultSet rs = null;		
+    	try {
+    		PreparedStatement ps=conn.prepareStatement("select OrganiseUnitID from SDMS_OrganiseUnit where  StandardCode =? and IsDelete = 0");
+    		ps.setString(1,danwei);
+    		rs=ps.executeQuery();
+			if(rs!=null){    					
+	    		rs.next();
+	    		ReportOrganiseUnit = rs.getString("OrganiseUnitID");
+    		}
+    	} catch (SQLException e) {   
+    		e.printStackTrace();   
+    	}    
+    	
+    	System.out.println("=========danwei=====id======="+ReportOrganiseUnit);  
+        System.out.println("=========uuid============"+id);
+        System.out.println("=========FaultCode============"+FaultCode);
+
+    	String EquipmentID = "00000000-0000-0000-0000-000000000000"; //EMB_Equipment 表 equipmentcode 转化为 e7d64b65-b847-11e5-a82b-64006a4cb35a
         
-        String FaultType = "3"; //FaultType 随便写 3
+        String FaultType = "1"; //FaultType 随便写 3
         
-        String ReportUser = "aofengadmin";
+        String ReportUser = renyuan;
         
         String ReportTime = time1.format(nowTime);//当前时间 2016-06-21 14:52:45
         
@@ -85,53 +122,152 @@ public class FileUpload extends HttpServlet {
         
         String EffectiveStatus = "-1";
         
-        String CreatedBy = ReportUser;
+        String CreatedBy = renyuan;
         
         String CreatedDate = time1.format(nowTime);
         
-        String ModifiedBy = ReportUser;
+        String ModifiedBy = renyuan;
 
         String ModifiedDate = time1.format(nowTime);
         
-        String weixiunshijian= "维修时间"; //维修时间
+        String weixiunshijian= "维修时间"; //维修时间   RepairDate
         
-        String guzhangbuwei = "故障部位"; //故障部位
+        String guzhangbuwei = "故障部位"; //故障部位    Explain '故障情况的说明',
         
-        String guzhangchengdu = "故障程度"; //故障程度
+        String guzhangchengdu = "故障程度"; //故障程度   Explain '故障情况的说明',
         
-        String weixiunneirong = "维修内容        "; //维修内容        
+        String weixiunneirong = "维修内容"; //维修内容   RepairExplain 维修情况说明  
         
-        String weixiuren = "维修人"; //维修人
+        String beizhu = "备注"; //备注      RepairExplain 维修情况说明  
         
-        String beizhu = "备注"; //备注        
+        String weixiuren = "维修人"; //维修人 RepairPerson 维修人姓名(填写)
         
+        String Explain = "";
+        String RepairExplain = "";
         
-        
-        
-        System.out.println("=========uuid============"+id);
-        System.out.println("=========FaultCode============"+FaultCode);
-        
-        GetExcelConn getExcelConn=new GetExcelConn();
-		ResultSet rs = null;
-		Connection conn=getExcelConn.getConnection(dizhi,duankou,mingzi,zhanghu,mima);
-		String sql="select count(*) as pageCount from emf_faultrepair";
-    	int i=0;   
-    	try {
-    		PreparedStatement ps=conn.prepareStatement(sql);
-    		rs=ps.executeQuery();
-    		if(rs!=null){    					
-    			rs.next();  
-    			i=rs.getInt("pageCount");  
-    		}
-    	} catch (SQLException e) {   
-    		e.printStackTrace();   
-    	}   
-    	getExcelConn.closeconn(conn);
-    	System.out.println("=========i============"+i);        
+        int rowSize = 0;
+        FileInputStream input = new FileInputStream(new File("/tmp/"+aFileName));  //读取的文件路径   
+        XSSFWorkbook wb = new XSSFWorkbook(new BufferedInputStream(input));   
+        XSSFCell cell = null;
+        for (int sheetIndex = 0; sheetIndex < wb.getNumberOfSheets(); sheetIndex++) {
+            XSSFSheet st = wb.getSheetAt(sheetIndex);
+            // 第一行为标题，不取
+            for (int rowIndex = 1; rowIndex <= st.getLastRowNum(); rowIndex++) {
+                XSSFRow row = st.getRow(rowIndex);
+                if (row == null) {
+                    continue;
+                }              
+                int tempRowSize = row.getLastCellNum() + 1;
+                if (tempRowSize > rowSize) {
+                    rowSize = tempRowSize;
+                }
+                String[] values = new String[rowSize];
+                Arrays.fill(values, "");
+                boolean hasValue = false;
+                if(row.getLastCellNum()==7){
+	                for (short columnIndex = 0; columnIndex <= row.getLastCellNum(); columnIndex++) {
+	                    String value = "";
+	                    cell = row.getCell(columnIndex);
+	                    if (cell != null) {
+	                        switch (cell.getCellType()) {
+	                        case XSSFCell.CELL_TYPE_STRING:
+	                            value = cell.getStringCellValue();
+	                            break;
+	                        case XSSFCell.CELL_TYPE_NUMERIC:
+	                            if (HSSFDateUtil.isCellDateFormatted(cell)) {
+	                               Date date = cell.getDateCellValue();
+	                               if (date != null) {
+	                                   value = new SimpleDateFormat("yyyy-MM-dd")
+	                                          .format(date);
+	                               } else {
+	                                   value = "";
+	                               }
+	                            } else {
+	                               value = new DecimalFormat("0").format(cell
+	                                      .getNumericCellValue());
+	                            }
+	                            break;
+	                        case XSSFCell.CELL_TYPE_FORMULA:
+	                            // 导入时如果为公式生成的数据则无值
+	                            if (!cell.getStringCellValue().equals("")) {
+	                               value = cell.getStringCellValue();
+	                            } else {
+	                               value = cell.getNumericCellValue() + "";
+	                            }
+	                            break;
+	                        case XSSFCell.CELL_TYPE_BLANK:
+	                            break;
+	                        case XSSFCell.CELL_TYPE_ERROR:
+	                            value = "";
+	                            break;
+	                        case XSSFCell.CELL_TYPE_BOOLEAN:
+	                            value = (cell.getBooleanCellValue() == true ? "Y"
+	                                   : "N");
+	                            break;
+	                        default:
+	                            value = "";
+	                        }
+	                    }
+		                if(columnIndex == 0){
+		                	weixiunshijian = value;
+		                	System.out.println("=========维修时间============"+weixiunshijian);
+		                }
+		                if(columnIndex == 1){
+		                	Explain = "故障部位:"+value;
+		                }		                
+		                if(columnIndex == 2){
+		                	Explain = Explain+" 故障程度:"+value;
+		                	System.out.println("====故障部位+故障程度======"+Explain);
+		                }
+		                if(columnIndex == 3){
+		                	RepairExplain = value;
+		                }
+		                if(columnIndex == 4){
+		                	weixiuren = value;
+		                	System.out.println("====维修人======"+weixiuren);
+		                }
+		                if(columnIndex == 5){
+		                	RepairExplain = RepairExplain+" 备注:"+value;
+		                	System.out.println("====维修内容+备注======"+RepairExplain);
+		                }
+		                if(columnIndex == 6){		                	
+		                	System.out.println("====设备编码======"+value);
+		            		rs = null;		
+		                	try {
+		                		PreparedStatement ps=conn.prepareStatement("select id from EMB_Equipment where IsDelete = 0 and EquipmentCode = ?");
+		                		ps.setString(1,danwei);
+		                		rs=ps.executeQuery();
+		            			if(rs!=null){    					
+		            	    		rs.next();
+		            	    		EquipmentID = rs.getString("id");
+		                		}
+		                	} catch (SQLException e) {   
+		                		e.printStackTrace();   
+		                	}
+		                	System.out.println("====设备id======"+EquipmentID);
+		                }
+	                }
+	                sqlzong = "insert into emf_faultrepair(id,FaultCode,ReportOrganiseUnit,EquipmentID,FaultType,ReportUser,ReportTime,"+
+	                		"IsRFIDScan,IsBarCodeScan,Status,EffectiveStatus,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,RepairDate,"+
+	                		"emf_faultrepair.Explain,RepairPerson,RepairExplain)"+
+	                		"values"+
+	                		"('"+id+"','"+FaultCode+"','"+ReportOrganiseUnit+"','"+EquipmentID+"','"+FaultType+"','"+ReportUser+"','"
+	                		+ReportTime+"','"+IsRFIDScan+"','"+IsBarCodeScan+"','"+Status+"','"+EffectiveStatus+"','"+CreatedBy+"','"
+	                		+CreatedDate+"','"+ModifiedBy+"','"+ModifiedDate+"','"+weixiunshijian+"','"
+	                		+Explain+"','"+weixiuren+"','"+RepairExplain+"')";
+	                System.out.println("====sqlzong======"+sqlzong);
+                }else{
+                	if(rowIndex==1){
+	                	System.out.println("=========文件数据不正确============");
+	                	break;
+                	}
+                }               
+            }
+        } 
+    	getExcelConn.closeconn(conn);      
         request.setAttribute("fileName",aFileName);  
         request.setAttribute("type","1");  
-        request.getRequestDispatcher("uploadFileResult.jsp").forward(request, response);  
-  
+        request.getRequestDispatcher("uploadFileResult.jsp").forward(request, response);    
     }  
     
 //    protected void doGet(HttpServletRequest request,  
