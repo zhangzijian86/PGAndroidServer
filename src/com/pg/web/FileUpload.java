@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.File;  
 import java.io.FileInputStream;  
 import java.io.IOException;  
-import java.net.URL;  
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,6 +32,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.util.UUID;
 
+import com.mysql.jdbc.Statement;
 import com.pg.bean.Pgdr_user;
 import com.pg.db.GetExcelConn;
   
@@ -80,9 +80,7 @@ public class FileUpload extends HttpServlet {
         System.out.println("=========renyuan============"+renyuan);
         
     	GetExcelConn getExcelConn=new GetExcelConn();
-    	Connection conn=getExcelConn.getConnection(dizhi,duankou,mingzi,zhanghu,mima);        
-        
-        String id = UUID.randomUUID().toString();        
+    	Connection conn=getExcelConn.getConnection(dizhi,duankou,mingzi,zhanghu,mima);          
       
         String FaultCode = "EMF";
         FaultCode = FaultCode+time.format(nowTime).toString()+(int)(Math.random()*100);
@@ -103,7 +101,7 @@ public class FileUpload extends HttpServlet {
     	}    
     	
     	System.out.println("=========danwei=====id======="+ReportOrganiseUnit);  
-        System.out.println("=========uuid============"+id);
+        
         System.out.println("=========FaultCode============"+FaultCode);
 
     	String EquipmentID = "00000000-0000-0000-0000-000000000000"; //EMB_Equipment 表 equipmentcode 转化为 e7d64b65-b847-11e5-a82b-64006a4cb35a
@@ -149,121 +147,163 @@ public class FileUpload extends HttpServlet {
         FileInputStream input = new FileInputStream(new File("/tmp/"+aFileName));  //读取的文件路径   
         XSSFWorkbook wb = new XSSFWorkbook(new BufferedInputStream(input));   
         XSSFCell cell = null;
-        for (int sheetIndex = 0; sheetIndex < wb.getNumberOfSheets(); sheetIndex++) {
-            XSSFSheet st = wb.getSheetAt(sheetIndex);
-            // 第一行为标题，不取
-            for (int rowIndex = 1; rowIndex <= st.getLastRowNum(); rowIndex++) {
-                XSSFRow row = st.getRow(rowIndex);
-                if (row == null) {
-                    continue;
-                }              
-                int tempRowSize = row.getLastCellNum() + 1;
-                if (tempRowSize > rowSize) {
-                    rowSize = tempRowSize;
-                }
-                String[] values = new String[rowSize];
-                Arrays.fill(values, "");
-                boolean hasValue = false;
-                if(row.getLastCellNum()==7){
-	                for (short columnIndex = 0; columnIndex <= row.getLastCellNum(); columnIndex++) {
-	                    String value = "";
-	                    cell = row.getCell(columnIndex);
-	                    if (cell != null) {
-	                        switch (cell.getCellType()) {
-	                        case XSSFCell.CELL_TYPE_STRING:
-	                            value = cell.getStringCellValue();
-	                            break;
-	                        case XSSFCell.CELL_TYPE_NUMERIC:
-	                            if (HSSFDateUtil.isCellDateFormatted(cell)) {
-	                               Date date = cell.getDateCellValue();
-	                               if (date != null) {
-	                                   value = new SimpleDateFormat("yyyy-MM-dd")
-	                                          .format(date);
-	                               } else {
-	                                   value = "";
-	                               }
-	                            } else {
-	                               value = new DecimalFormat("0").format(cell
-	                                      .getNumericCellValue());
-	                            }
-	                            break;
-	                        case XSSFCell.CELL_TYPE_FORMULA:
-	                            // 导入时如果为公式生成的数据则无值
-	                            if (!cell.getStringCellValue().equals("")) {
-	                               value = cell.getStringCellValue();
-	                            } else {
-	                               value = cell.getNumericCellValue() + "";
-	                            }
-	                            break;
-	                        case XSSFCell.CELL_TYPE_BLANK:
-	                            break;
-	                        case XSSFCell.CELL_TYPE_ERROR:
-	                            value = "";
-	                            break;
-	                        case XSSFCell.CELL_TYPE_BOOLEAN:
-	                            value = (cell.getBooleanCellValue() == true ? "Y"
-	                                   : "N");
-	                            break;
-	                        default:
-	                            value = "";
-	                        }
-	                    }
-		                if(columnIndex == 0){
-		                	weixiunshijian = value;
-		                	System.out.println("=========维修时间============"+weixiunshijian);
-		                }
-		                if(columnIndex == 1){
-		                	Explain = "故障部位:"+value;
-		                }		                
-		                if(columnIndex == 2){
-		                	Explain = Explain+" 故障程度:"+value;
-		                	System.out.println("====故障部位+故障程度======"+Explain);
-		                }
-		                if(columnIndex == 3){
-		                	RepairExplain = value;
-		                }
-		                if(columnIndex == 4){
-		                	weixiuren = value;
-		                	System.out.println("====维修人======"+weixiuren);
-		                }
-		                if(columnIndex == 5){
-		                	RepairExplain = RepairExplain+" 备注:"+value;
-		                	System.out.println("====维修内容+备注======"+RepairExplain);
-		                }
-		                if(columnIndex == 6){		                	
-		                	System.out.println("====设备编码======"+value);
-		            		rs = null;		
-		                	try {
-		                		PreparedStatement ps=conn.prepareStatement("select id from EMB_Equipment where IsDelete = 0 and EquipmentCode = ?");
-		                		ps.setString(1,danwei);
-		                		rs=ps.executeQuery();
-		            			if(rs!=null){    					
-		            	    		rs.next();
-		            	    		EquipmentID = rs.getString("id");
-		                		}
-		                	} catch (SQLException e) {   
-		                		e.printStackTrace();   
-		                	}
-		                	System.out.println("====设备id======"+EquipmentID);
-		                }
+        try {
+        	sqlzong = "insert into emf_faultrepair(id,FaultCode,ReportOrganiseUnit,EquipmentID,FaultType,ReportUser,ReportTime,"+
+            		"IsRFIDScan,IsBarCodeScan,Status,EffectiveStatus,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,RepairDate,"+
+            		"emf_faultrepair.Explain,RepairPerson,RepairExplain)"+
+            		"values"+
+            		"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        	conn.setAutoCommit(false);  
+        	PreparedStatement pstmt=conn.prepareStatement(sqlzong);      	  
+	        for (int sheetIndex = 0; sheetIndex < wb.getNumberOfSheets(); sheetIndex++) {
+	            XSSFSheet st = wb.getSheetAt(sheetIndex);
+	            // 第一行为标题，不取
+	            for (int rowIndex = 1; rowIndex <= st.getLastRowNum(); rowIndex++) {
+	                XSSFRow row = st.getRow(rowIndex);
+	                if (row == null) {
+	                    continue;
+	                }              
+	                int tempRowSize = row.getLastCellNum() + 1;
+	                if (tempRowSize > rowSize) {
+	                    rowSize = tempRowSize;
 	                }
-	                sqlzong = "insert into emf_faultrepair(id,FaultCode,ReportOrganiseUnit,EquipmentID,FaultType,ReportUser,ReportTime,"+
-	                		"IsRFIDScan,IsBarCodeScan,Status,EffectiveStatus,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,RepairDate,"+
-	                		"emf_faultrepair.Explain,RepairPerson,RepairExplain)"+
-	                		"values"+
-	                		"('"+id+"','"+FaultCode+"','"+ReportOrganiseUnit+"','"+EquipmentID+"','"+FaultType+"','"+ReportUser+"','"
-	                		+ReportTime+"','"+IsRFIDScan+"','"+IsBarCodeScan+"','"+Status+"','"+EffectiveStatus+"','"+CreatedBy+"','"
-	                		+CreatedDate+"','"+ModifiedBy+"','"+ModifiedDate+"','"+weixiunshijian+"','"
-	                		+Explain+"','"+weixiuren+"','"+RepairExplain+"')";
-	                System.out.println("====sqlzong======"+sqlzong);
-                }else{
-                	if(rowIndex==1){
-	                	System.out.println("=========文件数据不正确============");
-	                	break;
-                	}
-                }               
-            }
-        } 
+	                String[] values = new String[rowSize];
+	                Arrays.fill(values, "");
+	                boolean hasValue = false;
+	                if(row.getLastCellNum()==7){
+		                for (short columnIndex = 0; columnIndex <= row.getLastCellNum(); columnIndex++) {
+		                    String value = "";
+		                    cell = row.getCell(columnIndex);
+		                    if (cell != null) {
+		                        switch (cell.getCellType()) {
+		                        case XSSFCell.CELL_TYPE_STRING:
+		                            value = cell.getStringCellValue();
+		                            break;
+		                        case XSSFCell.CELL_TYPE_NUMERIC:
+		                            if (HSSFDateUtil.isCellDateFormatted(cell)) {
+		                               Date date = cell.getDateCellValue();
+		                               if (date != null) {
+		                                   value = new SimpleDateFormat("yyyy-MM-dd")
+		                                          .format(date);
+		                               } else {
+		                                   value = "";
+		                               }
+		                            } else {
+		                               value = new DecimalFormat("0").format(cell
+		                                      .getNumericCellValue());
+		                            }
+		                            break;
+		                        case XSSFCell.CELL_TYPE_FORMULA:
+		                            // 导入时如果为公式生成的数据则无值
+		                            if (!cell.getStringCellValue().equals("")) {
+		                               value = cell.getStringCellValue();
+		                            } else {
+		                               value = cell.getNumericCellValue() + "";
+		                            }
+		                            break;
+		                        case XSSFCell.CELL_TYPE_BLANK:
+		                            break;
+		                        case XSSFCell.CELL_TYPE_ERROR:
+		                            value = "";
+		                            break;
+		                        case XSSFCell.CELL_TYPE_BOOLEAN:
+		                            value = (cell.getBooleanCellValue() == true ? "Y"
+		                                   : "N");
+		                            break;
+		                        default:
+		                            value = "";
+		                        }
+		                    }
+			                if(columnIndex == 0){
+			                	weixiunshijian = value;
+			                	System.out.println("=========维修时间============"+weixiunshijian);
+			                }
+			                if(columnIndex == 1){
+			                	Explain = "故障部位:"+value;
+			                }		                
+			                if(columnIndex == 2){
+			                	Explain = Explain+" 故障程度:"+value;
+			                	System.out.println("====故障部位+故障程度======"+Explain);
+			                }
+			                if(columnIndex == 3){
+			                	RepairExplain = value;
+			                }
+			                if(columnIndex == 4){
+			                	weixiuren = value;
+			                	System.out.println("====维修人======"+weixiuren);
+			                }
+			                if(columnIndex == 5){
+			                	RepairExplain = RepairExplain+" 备注:"+value;
+			                	System.out.println("====维修内容+备注======"+RepairExplain);
+			                }
+			                if(columnIndex == 6){		                	
+			                	System.out.println("====设备编码======"+value);
+			            		rs = null;		
+			                	try {
+			                		PreparedStatement ps=conn.prepareStatement("select id from EMB_Equipment where IsDelete = 0 and EquipmentCode = ?");
+			                		ps.setString(1,danwei);
+			                		rs=ps.executeQuery();
+			            			if(rs!=null){    					
+			            	    		rs.next();
+			            	    		EquipmentID = rs.getString("id");
+			                		}
+			                	} catch (SQLException e) {   
+			                		e.printStackTrace();   
+			                	}
+			                	System.out.println("====设备id======"+EquipmentID);
+			                }
+		                }
+//		                sqlzong = "insert into emf_faultrepair(id,FaultCode,ReportOrganiseUnit,EquipmentID,FaultType,ReportUser,ReportTime,"+
+//		                		"IsRFIDScan,IsBarCodeScan,Status,EffectiveStatus,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,RepairDate,"+
+//		                		"emf_faultrepair.Explain,RepairPerson,RepairExplain)"+
+//		                		"values"+
+//		                		"('"+id+"','"+FaultCode+"','"+ReportOrganiseUnit+"','"+EquipmentID+"','"+FaultType+"','"+ReportUser+"','"
+//		                		+ReportTime+"','"+IsRFIDScan+"','"+IsBarCodeScan+"','"+Status+"','"+EffectiveStatus+"','"+CreatedBy+"','"
+//		                		+CreatedDate+"','"+ModifiedBy+"','"+ModifiedDate+"','"+weixiunshijian+"','"
+//		                		+Explain+"','"+weixiuren+"','"+RepairExplain+"')";		 
+		                String id = UUID.randomUUID().toString();  
+		                System.out.println("=========uuid============"+id);
+                        pstmt.setString(1, id); 
+                        pstmt.setString(2, FaultCode); 
+                        pstmt.setString(3, ReportOrganiseUnit); 
+                        pstmt.setString(4, EquipmentID); 
+                        pstmt.setString(5, FaultType); 
+                        pstmt.setString(6, ReportUser); 
+                        pstmt.setString(7, ReportTime); 
+                        pstmt.setString(8, IsRFIDScan); 
+                        pstmt.setString(9, IsBarCodeScan); 
+                        pstmt.setString(10, Status); 
+                        pstmt.setString(11, EffectiveStatus); 
+                        pstmt.setString(12, CreatedBy); 
+                        pstmt.setString(13, CreatedDate); 
+                        pstmt.setString(14, ModifiedBy); 
+                        pstmt.setString(15, ModifiedDate); 
+                        pstmt.setString(16, weixiunshijian); 
+                        pstmt.setString(17, Explain); 
+                        pstmt.setString(18, weixiuren); 
+                        pstmt.setString(19, RepairExplain); 
+                        //加入批处理 
+                        pstmt.addBatch(); 
+		                
+		                System.out.println("====sqlzong===new==="+pstmt.toString());
+		                if (sheetIndex % 10000 == 0){
+		                	pstmt.executeBatch();
+		                	conn.commit();
+		                }
+	                }else{
+	                	if(rowIndex==1){
+		                	System.out.println("=========文件数据不正确============");
+		                	break;
+	                	}
+	                }               
+	            }
+	        }
+	        pstmt.executeBatch();    //执行批处理 
+	        conn.commit();
+	        pstmt.close(); 
+        } catch (SQLException e) {   
+    		e.printStackTrace();   
+    	}  
     	getExcelConn.closeconn(conn);      
         request.setAttribute("fileName",aFileName);  
         request.setAttribute("type","1");  

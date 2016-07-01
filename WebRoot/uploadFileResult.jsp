@@ -29,7 +29,7 @@
       --------上传完成----------
       <br> 
       --------是否导入----------
-      <!--  
+       
       <br> 
         <form action="FileUpload" method="get">  
         	<input type="text" name="dizhi" size="10"  placeholder="数据库ip地址"  value ="123.56.104.86" >
@@ -50,8 +50,8 @@
             <br> 
             <input type="submit" value="导入文件:<%=fileName %>" />  
         </form>  
-     <br> 
-     -->
+     <br>      
+     <!-- 
      <br> 
         <form action="FileUpload" method="get">  
         	<input type="text" name="dizhi" size="10"  placeholder="数据库ip地址"  value ="192.8.50.206" >
@@ -73,6 +73,7 @@
             <input type="submit" value="导入文件:<%=fileName %>" />  
         </form>  
      <br> 
+     -->
      <%  
       	}   
       }else{
